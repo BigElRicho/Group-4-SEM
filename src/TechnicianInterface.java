@@ -11,6 +11,8 @@ public interface TechnicianInterface{
     public String closeIssueWithoutResolution();
 
     public String closeAndResolveIssue();
-    
-    
+
+    public String changeUsername();
+
+    public String changePassword();
 }

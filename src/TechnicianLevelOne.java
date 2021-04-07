@@ -1,11 +1,20 @@
 public class TechnicianLevelOne implements TechnicianInterface{
 
-    //Definitions
+    //Attributes
     int numberOfTicketsCurrentlyAssigned = 0;
     int technicianLevel = 1;
     String userName = "";
     String password = "";
 
+    //Constructors
+    public TechnicianLevelOne(int startingTicktes, int level, String userName, String password){
+        this.numberOfTicketsCurrentlyAssigned = startingTicktes;
+        this.technicianLevel = level;
+        this.userName = userName;
+        this.password = password;
+    }
+
+    //Methods
     @Override
     public String escalateIssue() {
         // TODO Auto-generated method stub
@@ -36,9 +45,20 @@ public class TechnicianLevelOne implements TechnicianInterface{
         return null;
     }
 
-    
+    public String changeUserName(){
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    
+    public String changePassword(){
+        //TODO
+        return null;
+    }
 
+    @Override
+    public String changeUsername() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
