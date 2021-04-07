@@ -21,40 +21,63 @@ class Staff
 		}
 	}
 
+	//This should be called by a menu prompting the user to enter their current and new password.
+	//This method will return false if the current password doesnt match, 
+	//they should be prompted to enter again
+	public boolean ResetPassword(String oldPword, String newPword)
+	{
+		if(getPassword() == oldPword)
+		{
+			setPassword(newPword);
+			return true;
+		}
+
+		return false;
+	}
+
 	/* Getters and Setters */
 
-    public String getEmail() {
+    public String getEmail() 
+	{
 		return Email;
 	}
 
-
-	public void setEmail(String email) {
+	//Doesnt need be called externally
+	private void setEmail(String email) 
+	{
 		Email = email;
 	}
 	
-	public String getName() {
+	public String getName() 
+	{
 		return Name;
 	}
 
-	public void setName(String name) {
+	//Doesnt need be called externally
+	private void setName(String name) 
+	{
 		Name = name;
 	}
 
-	public String getPhoneNumber() {
+	public String getPhoneNumber() 
+	{
 		return PhoneNumber;
 	}
 
-
-	public void setPhoneNumber(String pnum) {
+	//Doesnt need be called externally
+	private void setPhoneNumber(String pnum) 
+	{
 		PhoneNumber = pnum;
 	}
 
-	public String getPassword() {
+	public String getPassword() 
+	{
 		return Password;
 	}
 
-
-	public void setPassword(String password) {
+	//Doesnt need be called externally
+	private void setPassword(String password) 
+	{
 		Password = password;
 	}
 
