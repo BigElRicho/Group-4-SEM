@@ -43,7 +43,9 @@ class ITServiceDesk{
                 if(menuChoice == 2){
                     createAccount();
                 }
-
+                if(menuChoice == 9){// Currently used for testing information stored in arrays
+                    testArray();
+                }
             }else{
                 System.out.println("You are currently logged in as " + accountName);
                 //If logged in will display name and give options for tickets
@@ -74,8 +76,7 @@ class ITServiceDesk{
                     System.out.println("This feature coming soon");
                         // checkTicketStatus();
                 }
-                if(menuChoice == 9){// Currently used for testing information stored in both arrays
-                        //technicianLogin();
+                if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
                 }
             }
@@ -83,6 +84,7 @@ class ITServiceDesk{
         while (menuChoice != 0);
         input.close();
     }
+
     // Login for staff
     public static void staffLogin(){
         System.out.println("Staff login");
@@ -104,6 +106,7 @@ class ITServiceDesk{
             }
         }  
     }
+
     //Create new acccount
     public static void createAccount() {
         System.out.println("Create new account");
@@ -129,6 +132,7 @@ class ITServiceDesk{
                     input.next();
                 }
                 menuChoice = input.nextInt();
+                input.nextLine();
                 if(menuChoice == 1){
                     createAccount();
                 }
@@ -146,19 +150,19 @@ class ITServiceDesk{
     public static void technicianLogin() { 
     }
 
-    // Currently used for testing information stored in both arrays
+    // Currently used for testing information stored in arrays
     public static void testArray() {
         //Test for staff accounts
+        System.out.println("\nstaffAccount Array");
         for (int i = 0; i < staffAccountCount; i++){
-            System.out.println("\n");
             System.out.println("Name: " + staffAccount[i].getName());
             System.out.println("Email: " + staffAccount[i].getEmail());
             System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
             System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
         }
         // Test for tickets
+        System.out.println("\nTicket Array");
         for (int i = 0; i < ticketCount; i++){
-            System.out.println("\n");
             System.out.println("Author: " + ticket[i].getTicketAuthor());
             System.out.println("Descrip: " + ticket[i].getDescription());
             System.out.println("Severity: " + ticket[i].getSeverity());
