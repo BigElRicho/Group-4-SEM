@@ -24,8 +24,9 @@ class ITServiceDesk{
                 System.out.println(
                     "\nPlease select an option to continue\n\n"+
                     "1. Staff login\n"+
-                    "2. Create new staff account\n"+
-                    "3. Technician login\n"+
+                    "2. Forgot password\n"+
+                    "3. Create new staff account\n"+
+                    "4. Technician login\n"+
                     "9. TEST ARRAYS\n"+
                     "0. Exit");
 
@@ -41,6 +42,9 @@ class ITServiceDesk{
                     staffLogin();
                 }
                 if(menuChoice == 2){
+                    forgotPassword();
+                }
+                if(menuChoice == 3){
                     createAccount();
                 }
                 if(menuChoice == 9){// Currently used for testing information stored in arrays
@@ -98,13 +102,32 @@ class ITServiceDesk{
             if (emailInput.equals(staffAccount[i].getEmail()) 
                 && passwordInput.equals(staffAccount[i].getPassword())){
                    accountName = staffAccount[i].getName();
-                //submitTicket(accountName);
                 loggedIn = true;
 
             }else{
                 System.out.println("Email or Password incorrect.");
             }
         }  
+    }
+
+    //Forgot password feature
+    public static void forgotPassword() {
+        // Gets users email address
+        System.out.print("Forgot Password\n"+
+        "Enter email: ");
+        String email = input.nextLine();
+        // Uses the unique email to find the account
+        for (int i = 0; i < staffAccountCount; i++){
+            if(email.equals(staffAccount[i].getEmail())){
+                // Gets current password stored in staffAccount array
+                String oldPassword = staffAccount[i].getPassword();
+                // User enters new password
+                System.out.print("Enter new password: ");
+                String newPassword = input.nextLine();
+                // Users password is reset to new password
+                staffAccount[i].ResetPassword(oldPassword, newPassword);
+            }
+        }
     }
 
     //Create new acccount
