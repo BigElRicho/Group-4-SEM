@@ -153,32 +153,41 @@ class ITServiceDesk{
         String phoneNumber = input.nextLine();
         System.out.print("Password: ");
         String password = input.nextLine();
-        //Checks if email is already registered with an account.
+        Staff temp = null;
+        // Searches staffAccount array for duplicate email
         for (int i = 0; i < staffAccountCount; i++){
-            if(email.equals(staffAccount[i].getEmail())){
-                System.out.println("\nThe email entered is already registered.\n");
-                // Gives options to either try again or return to menu.
-                System.out.println(
-                    "1. Try again\n"+
-                    "2. Return to welcome menu");
-                //Loop for input validation
-                while (!input.hasNextInt()) { 
-                    System.out.println("Please select a number from the menu: ");
-                    input.next();
-                }
-                menuChoice = input.nextInt();
-                input.nextLine();
-                if(menuChoice == 1){
-                    createAccount();
-                }
-                if(menuChoice == 2){
-                    welcomeMenu();
-                }
+            if(staffAccount[i].getEmail().equals(email)){
+                temp = staffAccount[i];
             }
         }
-        // Add new staff account to staffAccount array
-        staffAccount[staffAccountCount] = new Staff(email, name, phoneNumber, password);
-        staffAccountCount++;
+        // If no email duplicates are found, email is unique
+        if(temp == null){
+            // Add new staff account to staffAccount array
+            staffAccount[staffAccountCount] = new Staff(email, name, phoneNumber, password);
+            staffAccountCount++;
+        }else{
+            // If duplicate is found, message displayed to user
+            System.out.println("\nThe email entered is already registered.\n");
+            // Gives options to either try again or return to menu.
+            System.out.println(
+                "1. Try again\n"+
+                "2. Return to welcome menu");
+            //Loop for input validation
+            while (!input.hasNextInt()) { 
+                System.out.println("Please select a number from the menu: ");
+                input.next();
+            }
+            menuChoice = input.nextInt();
+            input.nextLine();
+            // Re-try creating account
+            if(menuChoice == 1){
+                createAccount();
+            }
+            // Return to welcome menu
+            if(menuChoice == 2){
+                welcomeMenu();
+            }
+        }
     }
 
     // Future login for technicians 
