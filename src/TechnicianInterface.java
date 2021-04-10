@@ -2,17 +2,15 @@ public interface TechnicianInterface{
 
     public int technicianLevel = 0;
 
-    public String escalateIssue();
+    public String escalateTicket(Ticket ticket);
 
-    public String deescalateIssue();
+    public String deescalateTicket(Ticket ticket);
 
-    public String openIssue();
+    public String closeTicketWithoutResolution(Ticket ticket);
 
-    public String closeIssueWithoutResolution();
+    public String closeAndResolveTicket(Ticket ticket);
 
-    public String closeAndResolveIssue();
-
-    public String changeUsername();
+    public String changeUsername(String newUsername);
 
     public String changePassword(String newPassword);
 }

@@ -3,6 +3,7 @@ public class Ticket
 {
     String TicketAuthor; //The staff member who created the ticket, this should maybe be the email as it is unique?
     String Description;
+    String TicketID;
     TicketSeverity Severity; //Enum as it can only be a select few values
     TicketStatus Status = TicketStatus.Open; //Enum as it can only be a select few values
     Boolean Archived = false;
@@ -11,16 +12,18 @@ public class Ticket
 
     /* Constructors */
 
-    public Ticket(String auth, String desc) 
+    public Ticket(String id, String auth, String desc) 
     {
+        TicketID = id;
         TicketAuthor = auth;
         Description = desc;
         setSeverity(TicketSeverity.Low);
         setOpenDate();
     }
 
-    public Ticket(String auth, String desc, TicketSeverity severity)
+    public Ticket(String id, String auth, String desc, TicketSeverity severity)
     {
+        TicketID = id;
         TicketAuthor = auth;
         Description = desc;
         setSeverity(severity);
@@ -28,6 +31,11 @@ public class Ticket
     }
 
     /* Getters and Setters */
+
+    //Only need getter, should not be changed after initialization.
+    public String getId(String id){
+        return TicketID;
+    }
 
     //Only need getter, should not be changed after initialized
     public String getTicketAuthor() 

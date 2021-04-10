@@ -10,6 +10,7 @@ class ITServiceDesk{
     static int menuChoice;
     static Boolean loggedIn = false;
     static String accountName = "";
+    static Ticket archivedTickets[] = new Ticket[100];
     public static void main (String[] args){
         welcomeMenu();
     }
@@ -48,6 +49,9 @@ class ITServiceDesk{
                 }
                 if(menuChoice == 3){
                     createAccount();
+                }
+                if(menuChoice == 4){
+                    technicianLogin();
                 }
                 if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
@@ -191,7 +195,18 @@ class ITServiceDesk{
     }
 
     // Future login for technicians 
-    public static void technicianLogin() { 
+    public static void technicianLogin() {
+        //TODO finish technicianLogin().
+        String userNamePrompt = "Username: ";
+        String passwordPrompt = "Password";
+        String techUserName;
+        String techPassword;
+        System.out.print("Technician Login");
+        System.out.println(userNamePrompt);
+        techUserName = input.nextLine();
+        System.out.println(passwordPrompt);
+        techPassword = input.nextLine();
+
     }
 
     // Currently used for testing information stored in arrays
@@ -218,6 +233,7 @@ class ITServiceDesk{
     // Submit ticket
     public static void submitTicket() {
         // Gets details of IT issue for ticket
+        
         if(loggedIn == false){
             staffLogin();
         }
@@ -234,15 +250,15 @@ class ITServiceDesk{
         //If yes to submit, checks user input for severity and assigns correct enum
         if (submit.equalsIgnoreCase("Y")){
             if(severity.equalsIgnoreCase("LOW")){
-                ticket[ticketCount] = new Ticket(accountName, description, TicketSeverity.Low);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Low);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("MEDIUM")){
-                ticket[ticketCount] = new Ticket(accountName, description, TicketSeverity.Medium);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Medium);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("HIGH")){
-                ticket[ticketCount] = new Ticket(accountName, description, TicketSeverity.High);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.High);
                 ticketCount++;
             }
             else{// Error in submitting ticket returns user to beginning of ticket process.
@@ -257,6 +273,11 @@ class ITServiceDesk{
             System.out.println("Unexpected error.");
             welcomeMenu();
         }
+    }
+
+    // TODO Create method to setup pre-created technician accounts.
+    private void setupTechnicians(){
+        
     }
 }
     
