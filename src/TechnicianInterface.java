@@ -14,5 +14,5 @@ public interface TechnicianInterface{
 
     public String changeUsername();
 
-    public String changePassword();
+    public String changePassword(String newPassword);
 }

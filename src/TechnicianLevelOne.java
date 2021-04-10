@@ -50,8 +50,8 @@ public class TechnicianLevelOne implements TechnicianInterface{
         return null;
     }
 
-    public String changePassword(){
-        //TODO
+    public String changePassword(String newPassword){
+        
         return null;
     }
 
