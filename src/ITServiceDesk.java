@@ -17,17 +17,19 @@ class ITServiceDesk{
     public static void welcomeMenu(){
         do{
             
-            System.out.println("\nWelcome to Cinco IT Service Desk\n");
+            System.out.println(
+                "\nWelcome to Cinco IT Service Desk\n"+
+                "--------------------------------");
             if(loggedIn == false){
                 //If not logged in will display options for logging in or creating account
-                System.out.println("You are currently not logged in");
                 System.out.println(
-                    "\nPlease select an option to continue\n\n"+
-                    "1. Staff login\n"+
-                    "2. Forgot password\n"+
-                    "3. Create new staff account\n"+
-                    "4. Technician login\n"+
-                    "9. TEST ARRAYS\n"+
+                    "You are currently not logged in\n"+
+                    "Please select an option to continue\n"+
+                    "1. Staff Login\n"+
+                    "2. Forgot Password\n"+
+                    "3. Create New Staff Account\n"+
+                    "4. Technician Login\n"+
+                    //"9. TEST ARRAYS\n"+
                     "0. Exit");
 
                 //Loop for input validation
@@ -51,14 +53,14 @@ class ITServiceDesk{
                     testArray();
                 }
             }else{
-                System.out.println("You are currently logged in as " + accountName);
                 //If logged in will display name and give options for tickets
                 System.out.println(
-                    "\nPlease select an option to continue\n\n"+
+                    "You are currently logged in as " + accountName +
+                    "\nPlease select an option to continue\n"+
                     "1. Logout\n"+
                     "2. Submit new ticket\n"+
                     "3. Check Status of ticket\n"+
-                    "9. TEST ARRAYS\n"+
+                    //"9. TEST ARRAYS\n"+
                     "0. Exit");
         
                 //Loop for input validation
@@ -94,20 +96,30 @@ class ITServiceDesk{
         System.out.println("Staff login");
         System.out.print("Email: ");
         String emailInput = input.nextLine();
-        System.out.print("Password: ");
-        String passwordInput = input.nextLine();
-
+        // Temporary variable for testing email and 
+        // password against staffAccount array
+        Staff temp = null;
+        // Search staffAccount array for email
         for (int i = 0; i < staffAccountCount; i++){
-        
-            if (emailInput.equals(staffAccount[i].getEmail()) 
-                && passwordInput.equals(staffAccount[i].getPassword())){
-                   accountName = staffAccount[i].getName();
-                loggedIn = true;
-
-            }else{
-                System.out.println("Email or Password incorrect.");
+            if (staffAccount[i].getEmail().equals(emailInput)){
+                temp = staffAccount[i];
             }
-        }  
+        }
+        // If email is not found, message displayed to user
+        if(temp == null){
+            System.out.println("\nEmail entered does not have an account");
+        }else{
+            // Email found, user enters password
+            System.out.print("Password: ");
+            String passwordInput = input.nextLine();
+            // Checks if entered password is correct
+            if(temp.getPassword().equals(passwordInput)){
+            accountName = temp.getName();
+            loggedIn = true;
+            }else{
+                System.out.println("\nIncorrect Password");
+            }
+        }
     }
 
     //Forgot password feature
@@ -225,7 +237,7 @@ class ITServiceDesk{
                 ticketCount++;
             }
             else{// Error in submitting ticket returns user to beginning of ticket process.
-                System.out.println("Error in submitting ticket. Please try again");
+                System.out.println("\nError in submitting ticket. Please try again");
                 submitTicket();
             }
             
