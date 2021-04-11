@@ -12,7 +12,10 @@ class ITServiceDesk{
     static Boolean loggedIn = false;
     static String accountName = "";
     static Ticket archivedTickets[] = new Ticket[100];
+    static Ticket[] tempTickets = new Ticket[1];
+
     public static void main (String[] args){
+        setupTechnicians();
         welcomeMenu();
     }
     
@@ -207,16 +210,23 @@ class ITServiceDesk{
         String techPassword;
 
         System.out.println("Technician Login");
+        //Get and find matching username.
         System.out.println(userNamePrompt);
         techUserName = input.nextLine();
-        System.out.println(passwordPrompt);
-        techPassword = input.nextLine();
-
         for(int i = 0;i<technicianAccounts.length-1;i++){
             if(technicianAccounts[i].getUsername().equalsIgnoreCase(techUserName)){
                 System.out.println(accConfirmMsg + technicianAccounts[i].getUsername());
             }
         }
+        //Get and check password.
+        System.out.println(passwordPrompt);
+        techPassword = input.nextLine();
+        for(int i = 0;i<technicianAccounts.length-1;i++){
+            if(technicianAccounts[i].getPassword().equalsIgnoreCase(techPassword)){
+                System.out.println(pwMatchMsg + technicianAccounts[i].getPassword());
+            }
+        }
+        
 
     }
 
@@ -286,13 +296,27 @@ class ITServiceDesk{
         }
     }
 
-    // TODO Create method to setup pre-created technician accounts.
-    private void setupTechnicians(){
-        TechnicianLevelOne harryStyles = new TechnicianLevelOne(0, "harry.styles", "password", "Harry", "Styles");
-        TechnicianLevelOne niallHoran = new TechnicianLevelOne(0, "niall.horan", "password", "Niall", "Horan");
-        TechnicianLevelOne liamPayne = new TechnicianLevelOne(0, "liam.payne", "password", "Liam", "Payne");
+    public static void setupTechnicians(){
+        //Level 1 technician instantiations.
+        TechnicianLevelOne harryStyles = new TechnicianLevelOne("harry.styles", "password", "Harry", "Styles");
+        TechnicianLevelOne niallHoran = new TechnicianLevelOne("niall.horan", "password", "Niall", "Horan");
+        TechnicianLevelOne liamPayne = new TechnicianLevelOne("liam.payne", "password", "Liam", "Payne");
 
-        
+        //Level 2 technician instantiations.
+        TechnicianLevelTwo louisTomlinson = new TechnicianLevelTwo("louis.tomlinson","password","Louis","Tomlinson");
+        TechnicianLevelTwo zayneMalick = new TechnicianLevelTwo("louis.tomlinson","password","Louis","Tomlinson");
+
+        //Add to technicianAccounts array.
+        technicianAccounts[0] = harryStyles;
+        technicianAccounts[1] = niallHoran;
+        technicianAccounts[2] = liamPayne;
+        technicianAccounts[3] = louisTomlinson;
+        technicianAccounts[4] = zayneMalick;
+
+        //Print out user names to confirm presence.
+        for(int i = 0; i<technicianAccounts.length;i++){
+            System.out.println("Technician Account" + technicianAccounts[i].getUsername() + "loaded.");
+        }
     }
 }
     

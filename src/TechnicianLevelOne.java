@@ -4,7 +4,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     //Attributes
     private final int TICKET_QUOTA = 20;
-    private Ticket CurrentTicketList[] = new Ticket[TICKET_QUOTA] ;
+    private Ticket currentTicketList[] = new Ticket[TICKET_QUOTA] ;
     private int numberOfTicketsCurrentlyAssigned = 0;
     private final int TECHNICIAN_LEVEL = 1;
     private String userName = "";
@@ -14,8 +14,9 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
 
     //Constructors
-    public TechnicianLevelOne(int startingTicktes, String userName, String password, String firstName, String lastName ){
-        this.numberOfTicketsCurrentlyAssigned = startingTicktes;
+    public TechnicianLevelOne(String userName, String password, String firstName, String lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.userName = userName;
         this.password = password;
     }
@@ -32,39 +33,27 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     @Override
     @Description("Changes the issue from level 1 to level 2.")
-    public String escalateTicket(Ticket ticket) {
+    public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
         // TODO Finish escalate issue function.
-        String successMsg = "Issue escalated to: ";
-        String failMsg = "Issue unable to be escalated.";
-
-        if(ticket.getSeverity().equals(TicketSeverity.Low)){
-            ticket.setSeverity(TicketSeverity.Medium);
-            return successMsg + ticket.getSeverity();
+        String successMsg = "Ticket successfully changed to: ";
+        String failMsg = "Issue unable to be changed as it is already set to: ";
+        
+        //Check if severity is already set to the new severity level.
+        if(ticket.getSeverity().equals(newSeverity)){
+            return failMsg + newSeverity;
         }
-        else if(ticket.getSeverity().equals(TicketSeverity.Medium)){
-            ticket.setSeverity(TicketSeverity.High);
-            //TODO Have this method move ticket two a level 2 technician.
-            return successMsg + ticket.getSeverity();
-        }
+        //...else change the severity
         else{
-            return failMsg;
-        }
-    }
-
-    @Override
-    @Description("Changes the issue from Level 2 to level 1")
-    public String deescalateTicket(Ticket ticket) {
-        // TODO Finish de-escalate issue function.
-        String successMsg = "Issue deescalated to: ";
-        String failMsg = "Issue unable to be deescalated.";
-
-        //Medium to low.
-        if(ticket.getSeverity().equals(TicketSeverity.Medium)){
-            ticket.setSeverity(TicketSeverity.Low);
-            return successMsg + ticket.getSeverity();
-        }
-        else{
-            return failMsg;
+            ticket.setSeverity(newSeverity);
+            //if it gets set to HIGH, then store in the Service desk tempTicket array.
+            if(ticket.getSeverity().equals(TicketSeverity.High)){
+                ITServiceDesk.tempTickets[0] = ticket;
+                //Show that its actually in the list.
+                System.out.println(ITServiceDesk.tempTickets[0]);
+                //Remove ticket from currentList.
+                removeTicketfromList(ticket);
+            }
+            return successMsg + newSeverity;
         }
     }
 
@@ -133,7 +122,23 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     @Override
     public Ticket[] getCurrentTicketList() {
-        return CurrentTicketList;
+        return currentTicketList;
+    }
+
+    private String removeTicketfromList(Ticket ticket){
+
+        String successMsg = " removed from this technicians list.";
+        String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
+
+        //Find the ticket and remove from list
+        for(int i = 0;i < getCurrentTicketList().length;i++){
+            if(currentTicketList[i].getId() == ticket.getId()){
+                currentTicketList[i].equals(null);
+                return ticket.getId() + successMsg;
+            }
+        }
+        //if it cannot be found, send a failure message.
+        return failMsg;
     }
 
     @Override

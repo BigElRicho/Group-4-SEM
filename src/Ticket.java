@@ -33,7 +33,7 @@ public class Ticket
     /* Getters and Setters */
 
     //Only need getter, should not be changed after initialization.
-    public String getId(String id){
+    public String getId(){
         return TicketID;
     }
 

@@ -16,9 +16,7 @@ public interface TechnicianInterface{
 
     public String getPassword();
 
-    public String escalateTicket(Ticket ticket);
-
-    public String deescalateTicket(Ticket ticket);
+    public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity);
 
     public String closeTicketWithoutResolution(Ticket ticket);
 
