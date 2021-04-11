@@ -2,17 +2,27 @@ public interface TechnicianInterface{
 
     public int technicianLevel = 0;
 
-    public String escalateIssue();
+    public int getTechnicianLevel();
 
-    public String deescalateIssue();
+    public int getNumberOfTicketsCurrentlyAssigned();
 
-    public String openIssue();
+    public Ticket[] getCurrentTicketList();
 
-    public String closeIssueWithoutResolution();
+    public String getFirstName();
 
-    public String closeAndResolveIssue();
+    public String getLastName();
 
-    public String changeUsername();
+    public String getUsername();
+
+    public String getPassword();
+
+    public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity);
+
+    public String closeTicketWithoutResolution(Ticket ticket);
+
+    public String closeAndResolveTicket(Ticket ticket);
+
+    public String changeUsername(String newUsername);
 
     public String changePassword(String newPassword);
 }

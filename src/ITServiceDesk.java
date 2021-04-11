@@ -4,13 +4,19 @@ class ITServiceDesk{
 
     static Scanner input = new Scanner(System.in);
     static Staff[] staffAccount = new Staff[20];
+    static TechnicianInterface[] technicianAccounts = new TechnicianInterface[50];
+    static int technicianAccountCount = 5;
     static int staffAccountCount = 0;
     static Ticket[] ticket = new Ticket[20];
     static int ticketCount = 0;
     static int menuChoice;
     static Boolean loggedIn = false;
     static String accountName = "";
+    static Ticket archivedTickets[] = new Ticket[100];
+    static Ticket[] tempTickets = new Ticket[1];
+
     public static void main (String[] args){
+        setupTechnicians();
         welcomeMenu();
     }
     
@@ -48,6 +54,9 @@ class ITServiceDesk{
                 }
                 if(menuChoice == 3){
                     createAccount();
+                }
+                if(menuChoice == 4){
+                    technicianLogin();
                 }
                 if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
@@ -190,8 +199,57 @@ class ITServiceDesk{
         }
     }
 
-    // Future login for technicians 
-    public static void technicianLogin() { 
+    public static void technicianLogin() {
+
+        String userNamePrompt = "Username: ";
+        String passwordPrompt = "Password:";
+        String accConfirmMsg = "Account Found: ";
+        String pwMatchMsg = "Password correct. You are now logged in as: ";
+        String accNotFoundMsg = "Not matching account. Try again.";
+        String pwIncorrectMsg = "Password incorrect. Try again.";
+        String techUserName;
+        String techPassword;
+        boolean usernameFound = false;
+        boolean passwordMatches = false;
+        int foundAccountIndex = 0;
+
+        System.out.println("Technician Login");
+        //Get and find matching username.
+        System.out.println(userNamePrompt);
+        while(usernameFound == false){
+            techUserName = input.nextLine();
+            for(int i = 0;i<technicianAccountCount;i++){
+                if(technicianAccounts[i].getUsername().equalsIgnoreCase(techUserName)){
+                    foundAccountIndex = i;
+                    usernameFound = true;
+                    System.out.println(accConfirmMsg + technicianAccounts[i].getUsername());
+                }            
+            }
+            //If technician account is not found.
+            if(usernameFound == false){
+                System.out.println(accNotFoundMsg);
+                welcomeMenu();
+            }
+        }
+        
+        
+
+        //Get and check password.
+        while(passwordMatches == false){
+            System.out.println(passwordPrompt);
+            techPassword = input.nextLine();
+                if(technicianAccounts[foundAccountIndex].getPassword().equalsIgnoreCase(techPassword))
+                {
+                    System.out.println(pwMatchMsg + technicianAccounts[foundAccountIndex].getUsername());
+                    loggedIn = true;
+                    passwordMatches = true;
+                    accountName = technicianAccounts[foundAccountIndex].getUsername();
+                }
+                else{
+                    System.out.println(pwIncorrectMsg);
+                }
+        }
+        
     }
 
     // Currently used for testing information stored in arrays
@@ -218,6 +276,7 @@ class ITServiceDesk{
     // Submit ticket
     public static void submitTicket() {
         // Gets details of IT issue for ticket
+        
         if(loggedIn == false){
             staffLogin();
         }
@@ -234,15 +293,15 @@ class ITServiceDesk{
         //If yes to submit, checks user input for severity and assigns correct enum
         if (submit.equalsIgnoreCase("Y")){
             if(severity.equalsIgnoreCase("LOW")){
-                ticket[ticketCount] = new Ticket(accountName, description, TicketSeverity.Low);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Low);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("MEDIUM")){
-                ticket[ticketCount] = new Ticket(accountName, description, TicketSeverity.Medium);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Medium);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("HIGH")){
-                ticket[ticketCount] = new Ticket(accountName, description, TicketSeverity.High);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.High);
                 ticketCount++;
             }
             else{// Error in submitting ticket returns user to beginning of ticket process.
@@ -258,5 +317,28 @@ class ITServiceDesk{
             welcomeMenu();
         }
     }
+
+    public static void setupTechnicians(){
+        //Level 1 technician instantiations.
+        TechnicianLevelOne harryStyles = new TechnicianLevelOne("harry.styles", "password", "Harry", "Styles");
+        TechnicianLevelOne niallHoran = new TechnicianLevelOne("niall.horan", "password", "Niall", "Horan");
+        TechnicianLevelOne liamPayne = new TechnicianLevelOne("liam.payne", "password", "Liam", "Payne");
+
+        //Level 2 technician instantiations.
+        TechnicianLevelTwo louisTomlinson = new TechnicianLevelTwo("louis.tomlinson","password","Louis","Tomlinson");
+        TechnicianLevelTwo zayneMalick = new TechnicianLevelTwo("zayn.malik","password","Zayn","Malik");
+
+        //Add to technicianAccounts array.
+        technicianAccounts[0] = harryStyles;
+        technicianAccounts[1] = niallHoran;
+        technicianAccounts[2] = liamPayne;
+        technicianAccounts[3] = louisTomlinson;
+        technicianAccounts[4] = zayneMalick;
+
+        
+        //Print out user names to confirm presence.
+        for(int i = 0; i<technicianAccountCount;i++){
+            System.out.println("Technician Account " + technicianAccounts[i].getUsername() + " loaded.");
+        }
+    }
 }
-    
