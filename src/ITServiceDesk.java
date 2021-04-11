@@ -201,8 +201,6 @@ class ITServiceDesk{
 
     public static void technicianLogin() {
 
-        //TODO finish technicianLogin().
-
         String userNamePrompt = "Username: ";
         String passwordPrompt = "Password:";
         String accConfirmMsg = "Account Found: ";
