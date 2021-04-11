@@ -4,6 +4,7 @@ class ITServiceDesk{
 
     static Scanner input = new Scanner(System.in);
     static Staff[] staffAccount = new Staff[20];
+    static TechnicianInterface[] technicianAccounts = new TechnicianInterface[20];
     static int staffAccountCount = 0;
     static Ticket[] ticket = new Ticket[20];
     static int ticketCount = 0;
@@ -194,18 +195,28 @@ class ITServiceDesk{
         }
     }
 
-    // Future login for technicians 
     public static void technicianLogin() {
+
         //TODO finish technicianLogin().
+
         String userNamePrompt = "Username: ";
         String passwordPrompt = "Password";
+        String accConfirmMsg = "Account Found: ";
+        String pwMatchMsg = "Password correct. You are now logged in as: ";
         String techUserName;
         String techPassword;
-        System.out.print("Technician Login");
+
+        System.out.println("Technician Login");
         System.out.println(userNamePrompt);
         techUserName = input.nextLine();
         System.out.println(passwordPrompt);
         techPassword = input.nextLine();
+
+        for(int i = 0;i<technicianAccounts.length-1;i++){
+            if(technicianAccounts[i].getUsername().equalsIgnoreCase(techUserName)){
+                System.out.println(accConfirmMsg + technicianAccounts[i].getUsername());
+            }
+        }
 
     }
 
@@ -277,6 +288,10 @@ class ITServiceDesk{
 
     // TODO Create method to setup pre-created technician accounts.
     private void setupTechnicians(){
+        TechnicianLevelOne harryStyles = new TechnicianLevelOne(0, "harry.styles", "password", "Harry", "Styles");
+        TechnicianLevelOne niallHoran = new TechnicianLevelOne(0, "niall.horan", "password", "Niall", "Horan");
+        TechnicianLevelOne liamPayne = new TechnicianLevelOne(0, "liam.payne", "password", "Liam", "Payne");
+
         
     }
 }

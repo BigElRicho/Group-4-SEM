@@ -112,8 +112,32 @@ public class TechnicianLevelOne implements TechnicianInterface{
     }
 
     @Override
+    public String getUsername() {
+        return this.userName;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public int getTechnicianLevel() {
+        return TECHNICIAN_LEVEL;
+    }
+
+    @Override
+    public int getNumberOfTicketsCurrentlyAssigned() {
+        return numberOfTicketsCurrentlyAssigned;
+    }
+
+    @Override
+    public Ticket[] getCurrentTicketList() {
+        return CurrentTicketList;
+    }
+
+    @Override
     public String toString(){
         return this.firstName +" "+ this.lastName;
     }
-
 }
