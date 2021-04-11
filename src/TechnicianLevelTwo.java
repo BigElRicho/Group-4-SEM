@@ -73,26 +73,42 @@ public class TechnicianLevelTwo implements TechnicianInterface{
 
     @Override
     public String closeTicketWithoutResolution(Ticket ticket) {
-        // TODO Auto-generated method stub
+        // TODO closeTicketWithoutResolution function.
         return null;
     }
 
     @Override
     public String closeAndResolveTicket(Ticket ticket) {
-        // TODO Auto-generated method stub
+        // TODO closeAndResolveTicket function
         return null;
     }
 
     @Override
     public String changeUsername(String newUsername) {
-        // TODO Auto-generated method stub
-        return null;
+        String successMsg = "Username changed to: " + userName + ".";
+        String failMsg = "Username was not changed. New username was either blank or there was another issue.";
+
+        if(newUsername != null){
+            this.userName = newUsername;
+            return successMsg;
+        }
+        else{
+            return failMsg;
+        }
     }
 
     @Override
     public String changePassword(String newPassword) {
-        // TODO Auto-generated method stub
-        return null;
+        String successMsg = "Password changed to: " + password + ".";
+        String failMsg = "Password was not changed. New password was blank or there was another issue.";
+        
+        if(newPassword != null){
+            this.password = newPassword;
+            return successMsg;
+        }
+        else{
+            return failMsg;
+        }
     }
 
     @Override
@@ -119,5 +135,4 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     public String getLastName() {
         return this.lastName;
     }
-    
 }
