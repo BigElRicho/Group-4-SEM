@@ -31,7 +31,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
 
     @Override
     public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
-        // TODO Finish escalate issue function.
+        // TODO Perform testing on this function.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
