@@ -59,7 +59,7 @@ public class Ticket
         //Must be open before proceeding
         if(Status.equals(TicketStatus.Open))
         {
-            Severity = severity;
+            this.Severity = severity;
         }
         else
         {
@@ -147,8 +147,8 @@ public class Ticket
     public String toString()
     {
         //If closed date is null, will print "N/A" for "Date Closed" field
-        return String.format("Author: %s\nDate Opened: %s\nDate Closed: %s\nStatus: %s\nSeverity: %s\nDescription: %s", 
-            getTicketAuthor(), getOpenDate(), getClosedDate() != null ? "N//A" : getClosedDate() , getStatus(), getSeverity(), getDescription());
+        return String.format("ID: %s\nAuthor: %s\nDate Opened: %s\nDate Closed: %s\nStatus: %s\nSeverity: %s\nDescription: %s\n", 
+            getId(), getTicketAuthor(), getOpenDate(), getClosedDate() != null ? "N//A" : getClosedDate() , getStatus(), getSeverity(), getDescription());
     }
 
 }

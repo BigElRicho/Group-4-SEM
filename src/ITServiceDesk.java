@@ -1,3 +1,5 @@
+
+import java.util.Objects;
 import java.util.Scanner;
 
 class ITServiceDesk{
@@ -69,6 +71,7 @@ class ITServiceDesk{
                     "1. Logout\n"+
                     "2. Submit new ticket\n"+
                     "3. Check Status of ticket\n"+
+                    "4. Change Ticket Severity\n"+
                     //"9. TEST ARRAYS\n"+
                     "0. Exit");
         
@@ -90,6 +93,9 @@ class ITServiceDesk{
                 if(menuChoice == 3){
                     System.out.println("This feature coming soon");
                         // checkTicketStatus();
+                }
+                if(menuChoice == 4){
+                    ChangeTicketSeverity();
                 }
                 if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
@@ -232,8 +238,6 @@ class ITServiceDesk{
             }
         }
         
-        
-
         //Get and check password.
         while(passwordMatches == false){
             System.out.println(passwordPrompt);
@@ -272,6 +276,7 @@ class ITServiceDesk{
             System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
         }
     }
+
 
     // Submit ticket
     public static void submitTicket() {
@@ -335,10 +340,147 @@ class ITServiceDesk{
         technicianAccounts[3] = louisTomlinson;
         technicianAccounts[4] = zayneMalick;
 
-        
+        technicianAccounts[0].getCurrentTicketList()[0] = new Ticket("1", "John", "Big poo");
+        technicianAccounts[0].getCurrentTicketList()[1] = new Ticket("2", "John", "Small pee", TicketSeverity.High);
+
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
             System.out.println("Technician Account " + technicianAccounts[i].getUsername() + " loaded.");
+        }
+    }
+
+        //Method used for checking the tempTicket array. If there is a ticket found
+    //It will atempt to assign it based on severity and technician with the lowest ticket count
+    private static void ReAssignTicket()
+    {
+        if(tempTickets.length > 1)
+        {
+            AssignTicket(tempTickets[0]);
+        }
+
+        tempTickets[0] = null;
+    }
+
+    //Assign ticket to technician
+    private static void AssignTicket(Ticket ticket)
+    {
+        int LowestTicketCount = 0;
+        int RequiredTechnicianLevel;
+        int TechnicianIndex = 0;
+
+        //If a tickets severity is HIGH, then  it should be assigned to a level 2 tech
+        //Otherwise it can go to a level 1 tech
+        if(ticket.getSeverity() == TicketSeverity.High)
+        {
+            RequiredTechnicianLevel = 2;
+        }
+        else
+        {
+            RequiredTechnicianLevel = 1;
+        }
+
+        //Find the technician with the lowest ticket count
+        for(int i = 0; i < technicianAccountCount; i++)
+        {         
+            //If this is the first time through the loop, set default values
+            if(i == 0)
+            {
+                LowestTicketCount = technicianAccounts[i].getNumberOfTicketsCurrentlyAssigned();
+            }
+            else if(Objects.nonNull(technicianAccounts[i])) //Make sure its not a null object
+            {
+                //If the current techs level is correct and they have a lower ticket count than the previous tech
+                if(technicianAccounts[i].getTechnicianLevel() == RequiredTechnicianLevel && technicianAccounts[i].getNumberOfTicketsCurrentlyAssigned() < LowestTicketCount)
+                {
+                    //Make note of their index and assign the new lowest ticket count
+                    TechnicianIndex = i;
+                    LowestTicketCount = technicianAccounts[i].getNumberOfTicketsCurrentlyAssigned();
+                }
+            }
+        }
+        
+        //Insert the new ticket -> Consider making this a method in the technician to avoid errors
+        technicianAccounts[TechnicianIndex].getCurrentTicketList()[LowestTicketCount] = ticket;
+    }
+
+    //Validate Technician is Currently loged in
+    private static int ValidateCurrentUserTechnician()
+    {
+        if(loggedIn != false)
+        {
+            int index  = 0;
+            for (TechnicianInterface t : technicianAccounts) 
+            {
+                if(t.getUsername().equals(accountName))
+                {
+                    //return the technicians index in the array
+                    return index;
+                }
+                index++;
+            }
+        }
+
+        //Not a technician
+        return -1;
+    }
+
+    //Escalate Ticket
+    public static void ChangeTicketSeverity()
+    {
+        int TechnicianIndex = ValidateCurrentUserTechnician();
+        
+        //If the technician is in the array
+        if(TechnicianIndex >= 0)
+        {
+            System.out.println(String.format("You currently have %d tickets assigned to you\n", technicianAccounts[TechnicianIndex].getNumberOfTicketsCurrentlyAssigned()));
+            
+            //Print technicians ticket list
+            for(Ticket t : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+            {
+                if(t != null) //Because we can have null objects
+                {
+                    System.out.println(t);
+                }
+            }
+
+                System.out.println("Enter the ticket ID of the ticket you wish to escalate: ");
+
+                String TicketID = input.nextLine();
+
+                for(Ticket ticket : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+                {
+                    if(Objects.nonNull(ticket) && ticket.getId().equals(TicketID)) // Avoid null objects
+                    {
+                        System.out.println("What severity level would you like to escalte this ticket to?\n1. Low\n2. Medium\n3. High");
+                        
+                        int newLevel = input.nextInt();
+
+                        //Change severity based on the input 1 -> 3
+                        switch(newLevel)
+                        {
+                            case 1: 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Low);
+                                break;
+                            case 2: 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Medium);
+                                break;
+                            case 3: 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.High);
+                                break;
+                            default: 
+                                System.out.println("Error. Be sure to enter a number 1-3\n");
+                        }
+
+                        //Check to see if the ticket needs to be reassigned
+                        ReAssignTicket();
+                    }
+                }
+
+                System.out.println("Invalid Ticket ID, please try again\n");
+        }
+        else
+        {
+            System.out.println("This feature is only available for technicians.\n");
         }
     }
 }
