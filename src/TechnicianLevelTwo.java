@@ -52,16 +52,15 @@ public class TechnicianLevelTwo implements TechnicianInterface{
             }
             return successMsg + newSeverity;
         }
-    
     }
 
     private String removeTicketfromList(Ticket ticket) {
-        
+        //TODO remove ticket function needs testing.
         String successMsg = " removed from this technicians list.";
         String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
 
         //Find the ticket and remove from list
-        for(int i = 0;i < getCurrentTicketList().length;i++){
+        for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
             if(currentTicketList[i].getId() == ticket.getId()){
                 currentTicketList[i].equals(null);
                 return ticket.getId() + successMsg;
@@ -72,9 +71,33 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     }
 
     @Override
+    public String addTicket(Ticket ticket) {
+        //TODO addTicket function needs testing.
+        String successMsg = " was successfully added.";
+        String failMsg = "Ticket was unable to be added. Try again";
+
+        if(ticket != null){
+            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticket;
+            modifyTicketCount(1);
+            return ticket.getId() + successMsg;
+        }
+        else{
+           return failMsg;
+        }
+    }
+
+    // TODO closeTicketWithoutResolution function.
+    @Override
     public String closeTicketWithoutResolution(Ticket ticket) {
-        // TODO closeTicketWithoutResolution function.
-        return null;
+        String successMsg = " has been closed without a resolution.";
+        String failMsg = "Something went wrong while closing the ticket. Try again";
+
+        if(ticket.setStatus(TicketStatus.ClosedUnresolved)){
+            return ticket.getId() + successMsg;
+        }
+        else{
+            return failMsg;
+        }        
     }
 
     @Override
@@ -134,5 +157,21 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     @Override
     public String getLastName() {
         return this.lastName;
+    }
+
+    @Override
+    public String modifyTicketCount(int modifier) {
+        String oldCount = Integer.toString(numberOfTicketsCurrentlyAssigned);
+        if(numberOfTicketsCurrentlyAssigned >= 0){
+            numberOfTicketsCurrentlyAssigned += modifier;
+            return "ticket count updated from" + oldCount + "to:" + numberOfTicketsCurrentlyAssigned;
+        }
+        else return "Ticket count cannot be made negative.";
+    }
+
+    @Override
+    public String archiveTicket(Ticket ticket) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

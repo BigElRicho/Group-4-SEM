@@ -60,6 +60,9 @@ public class TechnicianLevelOne implements TechnicianInterface{
     @Override
     public String closeTicketWithoutResolution(Ticket ticket) {
         // TODO Build close without resolution function.
+        String successMsg = " was successfully closed without a resolution.";
+        String failMsg = "Something went wrong while trying to close the ticket.";
+        
         return null;
     }
 
@@ -131,9 +134,10 @@ public class TechnicianLevelOne implements TechnicianInterface{
         String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
 
         //Find the ticket and remove from list
-        for(int i = 0;i < getCurrentTicketList().length;i++){
+        for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
             if(currentTicketList[i].getId() == ticket.getId()){
                 currentTicketList[i].equals(null);
+                modifyTicketCount(-1);
                 return ticket.getId() + successMsg;
             }
         }
@@ -142,7 +146,38 @@ public class TechnicianLevelOne implements TechnicianInterface{
     }
 
     @Override
+    public String addTicket(Ticket ticket) {
+        String successMsg = " was successfully added.";
+        String failMsg = "Ticket was unable to be added. Try again";
+
+        if(ticket != null){
+            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticket;
+            modifyTicketCount(1);
+            return ticket.getId() + successMsg;
+        }
+        else{
+           return failMsg;
+        }
+    }
+
+    @Override
     public String toString(){
         return this.firstName +" "+ this.lastName;
+    }
+
+    @Override
+    public String modifyTicketCount(int modifier) {
+        String oldCount = Integer.toString(numberOfTicketsCurrentlyAssigned);
+        if(numberOfTicketsCurrentlyAssigned >= 0){
+            numberOfTicketsCurrentlyAssigned += modifier;
+            return "ticket count updated from" + oldCount + "to:" + numberOfTicketsCurrentlyAssigned;
+        }
+        else return "Ticket count cannot be made negative.";
+    }
+
+    @Override
+    public String archiveTicket(Ticket ticket) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

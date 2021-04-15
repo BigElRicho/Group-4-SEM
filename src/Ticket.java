@@ -1,7 +1,7 @@
 
 public class Ticket 
 {
-    String TicketAuthor; //The staff member who created the ticket, this should maybe be the email as it is unique?
+    String TicketAuthor; //The staff member who created the ticket, this should maybe be the email as it is unique? --please make username--
     String Description;
     String TicketID;
     TicketSeverity Severity; //Enum as it can only be a select few values
@@ -73,7 +73,7 @@ public class Ticket
         return Status;
     }
 
-    public void setStatus(TicketStatus status) 
+    public boolean setStatus(TicketStatus status) 
     {
         //Check if it is archived
         if(!getArchived())
@@ -85,9 +85,11 @@ public class Ticket
             }
 
             Status = status;
+            return true;
         }
 
         System.out.println("Ticket has been closed for more than 24 hours and cannont be opened.");
+        return false;
     }
 
     public Boolean getArchived() 
