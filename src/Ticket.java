@@ -1,7 +1,7 @@
 
 public class Ticket 
 {
-    String TicketAuthor; //The staff member who created the ticket, this should maybe be the email as it is unique?
+    String TicketAuthor; //The staff member who created the ticket
     String AuthorEmail; //Unique identifier for the author of the ticket
     String Description;
     String TicketID;
@@ -13,7 +13,7 @@ public class Ticket
 
     /* Constructors */
 
-    public Ticket(String id, String auth, String authEmail, String desc) 
+    public Ticket(String id, String authEmail, String auth, String desc) 
     {
         TicketID = id;
         TicketAuthor = auth;
@@ -23,7 +23,7 @@ public class Ticket
         setOpenDate();
     }
 
-    public Ticket(String id, String auth, String desc, String authEmail, TicketSeverity severity)
+    public Ticket(String id, String auth, String authEmail, String desc, TicketSeverity severity)
     {
         TicketID = id;
         TicketAuthor = auth;

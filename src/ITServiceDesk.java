@@ -3,11 +3,11 @@ import java.util.Scanner;
 class ITServiceDesk{
 
     static Scanner input = new Scanner(System.in);
-    static Staff[] staffAccount = new Staff[20];
+    static Staff[] staffAccount = new Staff[50];
     static TechnicianInterface[] technicianAccounts = new TechnicianInterface[50];
     static int technicianAccountCount = 5;
     static int staffAccountCount = 0;
-    static Ticket[] ticket = new Ticket[20];
+    static Ticket[] ticket = new Ticket[50];
     static int ticketCount = 0;
     static int menuChoice;
     static Boolean loggedIn = false;
@@ -59,7 +59,8 @@ class ITServiceDesk{
                 if(menuChoice == 4){
                     technicianLogin();
                 }
-                if(menuChoice == 9){// Currently used for testing information stored in arrays
+                // Used for testing information stored in arrays
+                if(menuChoice == 9){// Used for testing information stored in arrays
                     testArray();
                 }
             }else{
@@ -91,7 +92,7 @@ class ITServiceDesk{
                 if(menuChoice == 3){
                     checkTicketStatus();
                 }
-                if(menuChoice == 9){// Currently used for testing information stored in arrays
+                if(menuChoice == 9){
                     testArray();
                 }
             }
@@ -255,11 +256,10 @@ class ITServiceDesk{
 
     // Submit ticket
     public static void submitTicket() {
-        // Gets details of IT issue for ticket
-        
         if(loggedIn == false){
             staffLogin();
         }
+        // Gets details of IT issue for ticket
         System.out.println(
         "\n\nTicket author: " + accountName + "\n"+
         "Please complete the following information");
@@ -301,9 +301,11 @@ class ITServiceDesk{
     public static void checkTicketStatus(){
         System.out.println("\nTicket Status");
         System.out.println("-------------");
-        System.out.println("All tickets submitted by " + accountName);
+        System.out.println("All open tickets submitted by " + accountName);
         for (int i = 0; i < ticketCount; i++){
+            // Finds the correct user by their unique email
             if (ticket[i].getAuthorEmail() == accountEmail){
+                // Displays all open tickets the user has submitted
                 if(ticket[i].getStatus() == TicketStatus.Open){
                     System.out.println(
                         "\nTicket ID: " + ticket[i].getId() + 
