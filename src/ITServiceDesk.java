@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 class ITServiceDesk{
 
@@ -136,8 +137,10 @@ class ITServiceDesk{
     //Forgot password feature
     public static void forgotPassword() {
         // Gets users email address
-        System.out.print("Forgot Password\n"+
-        "Enter email: ");
+        System.out.print(
+            "\nForgot Password\n" +
+            "---------------\n" +
+            "Enter email: ");
         String email = input.nextLine();
         // Uses the unique email to find the account
         for (int i = 0; i < staffAccountCount; i++){
@@ -147,8 +150,16 @@ class ITServiceDesk{
                 // User enters new password
                 System.out.print("Enter new password: ");
                 String newPassword = input.nextLine();
+
+                // Validates user input for password rules
+                while(!passwordValidation(newPassword)){       
+                    System.out.print("Password: ");
+                    newPassword = input.nextLine();
+                }
                 // Users password is reset to new password
                 staffAccount[i].ResetPassword(oldPassword, newPassword);
+            }else{
+                System.out.println("This email does not have an account");
             }
         }
     }
@@ -164,6 +175,13 @@ class ITServiceDesk{
         String phoneNumber = input.nextLine();
         System.out.print("Password: ");
         String password = input.nextLine();
+
+        // Validates user input for password rules
+        while(!passwordValidation(password)){       
+            System.out.print("Password: ");
+            password = input.nextLine();
+        }
+
         Staff temp = null;
         // Searches staffAccount array for duplicate email
         for (int i = 0; i < staffAccountCount; i++){
@@ -199,6 +217,33 @@ class ITServiceDesk{
                 welcomeMenu();
             }
         }
+    }
+
+    // Validates user input for password
+    public static boolean passwordValidation(String password){
+        boolean isValid = true;
+        // Tests for password length of at least 20
+        if(password.length() < 20){
+            System.out.println("**Password must be at least 20 characters");
+            isValid = false;
+        }
+        // Tests for lowercase characters
+        if(!Pattern.compile("[a-z]").matcher(password).find()){
+            System.out.println("**Password must contain at least one lowercase character");
+            isValid = false;
+        }
+        // Tests for uppercase characters
+        if(!Pattern.compile("[A-Z]").matcher(password).find()){
+            System.out.println("**Password must contain at least one uppercase character");
+            isValid = false;
+        }
+        // Tests for numbers
+        if(!Pattern.compile("[0-9]").matcher(password).find()){
+            System.out.println("**Password must contain at least one number");
+            isValid = false;
+        }
+        // Returns true or false
+        return isValid;
     }
 
     public static void technicianLogin() {
@@ -299,9 +344,10 @@ class ITServiceDesk{
     }
 
     public static void checkTicketStatus(){
-        System.out.println("\nTicket Status");
-        System.out.println("-------------");
-        System.out.println("All open tickets submitted by " + accountName);
+        System.out.println(
+            "\nTicket Status\n" +
+            "-------------\n" +
+            "All open tickets submitted by " + accountName);
         for (int i = 0; i < ticketCount; i++){
             // Finds the correct user by their unique email
             if (ticket[i].getAuthorEmail() == accountEmail){
