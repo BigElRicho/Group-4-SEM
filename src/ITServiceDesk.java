@@ -12,6 +12,7 @@ class ITServiceDesk{
     static int menuChoice;
     static Boolean loggedIn = false;
     static String accountName = "";
+    static String accountEmail = "";
     static Ticket archivedTickets[] = new Ticket[100];
     static Ticket[] tempTickets = new Ticket[1];
 
@@ -88,8 +89,7 @@ class ITServiceDesk{
                     submitTicket();
                 }
                 if(menuChoice == 3){
-                    System.out.println("This feature coming soon");
-                        // checkTicketStatus();
+                    checkTicketStatus();
                 }
                 if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
@@ -124,6 +124,7 @@ class ITServiceDesk{
             // Checks if entered password is correct
             if(temp.getPassword().equals(passwordInput)){
             accountName = temp.getName();
+            accountEmail = temp.getEmail();
             loggedIn = true;
             }else{
                 System.out.println("\nIncorrect Password");
@@ -252,27 +253,6 @@ class ITServiceDesk{
         
     }
 
-    // Currently used for testing information stored in arrays
-    public static void testArray() {
-        //Test for staff accounts
-        System.out.println("\nstaffAccount Array");
-        for (int i = 0; i < staffAccountCount; i++){
-            System.out.println("Name: " + staffAccount[i].getName());
-            System.out.println("Email: " + staffAccount[i].getEmail());
-            System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
-            System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
-        }
-        // Test for tickets
-        System.out.println("\nTicket Array");
-        for (int i = 0; i < ticketCount; i++){
-            System.out.println("Author: " + ticket[i].getTicketAuthor());
-            System.out.println("Descrip: " + ticket[i].getDescription());
-            System.out.println("Severity: " + ticket[i].getSeverity());
-            System.out.println("Status: " + ticket[i].getStatus());
-            System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
-        }
-    }
-
     // Submit ticket
     public static void submitTicket() {
         // Gets details of IT issue for ticket
@@ -293,15 +273,15 @@ class ITServiceDesk{
         //If yes to submit, checks user input for severity and assigns correct enum
         if (submit.equalsIgnoreCase("Y")){
             if(severity.equalsIgnoreCase("LOW")){
-                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Low);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, accountEmail, description, TicketSeverity.Low);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("MEDIUM")){
-                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Medium);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, accountEmail, description, TicketSeverity.Medium);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("HIGH")){
-                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.High);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, accountEmail, description, TicketSeverity.High);
                 ticketCount++;
             }
             else{// Error in submitting ticket returns user to beginning of ticket process.
@@ -316,6 +296,29 @@ class ITServiceDesk{
             System.out.println("Unexpected error.");
             welcomeMenu();
         }
+    }
+
+    public static void checkTicketStatus(){
+        System.out.println("\nTicket Status");
+        System.out.println("-------------");
+        System.out.println("All tickets submitted by " + accountName);
+        for (int i = 0; i < ticketCount; i++){
+            if (ticket[i].getAuthorEmail() == accountEmail){
+                if(ticket[i].getStatus() == TicketStatus.Open){
+                    System.out.println(
+                        "\nTicket ID: " + ticket[i].getId() + 
+                        "\nDescription: " + ticket[i].getDescription() + 
+                        "\nSeverity: " + ticket[i].getSeverity() +
+                        "\nOpen Date: " + ticket[i].OpenDate + 
+                        "\nStatus: " + ticket[i].getStatus());
+                }
+                else{
+                    System.out.println("You do not have any open tickets");
+                }
+            }else{
+                System.out.println("You do not have any open tickets");
+            }
+        }    
     }
 
     public static void setupTechnicians(){
@@ -339,6 +342,28 @@ class ITServiceDesk{
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
             System.out.println("Technician Account " + technicianAccounts[i].getUsername() + " loaded.");
+        }
+    }
+
+    // Currently used for testing information stored in arrays
+    public static void testArray() {
+        //Test for staff accounts
+        System.out.println("\nstaffAccount Array");
+        for (int i = 0; i < staffAccountCount; i++){
+            System.out.println("Name: " + staffAccount[i].getName());
+            System.out.println("Email: " + staffAccount[i].getEmail());
+            System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
+            System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
+        }
+        // Test for tickets
+        System.out.println("\nTicket Array");
+        for (int i = 0; i < ticketCount; i++){
+            System.out.println("Author: " + ticket[i].getTicketAuthor());
+            System.out.println("AuthorEmail: " + ticket[i].getAuthorEmail());
+            System.out.println("Descrip: " + ticket[i].getDescription());
+            System.out.println("Severity: " + ticket[i].getSeverity());
+            System.out.println("Status: " + ticket[i].getStatus());
+            System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
         }
     }
 }
