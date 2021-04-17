@@ -59,17 +59,19 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     @Override
     public String closeTicketWithoutResolution(Ticket ticket) {
-        // TODO Build close without resolution function.
+        // TODO closeTicketWithoutResolution needs testing.
         String successMsg = " was successfully closed without a resolution.";
-        String failMsg = "Something went wrong while trying to close the ticket.";
-        
-        return null;
+        //String failMsg = "Something went wrong while trying to close the ticket.";
+            ticket.setStatus(TicketStatus.ClosedUnresolved);
+            return ticket.getId() + successMsg;
     }
 
     @Override
     public String closeAndResolveTicket(Ticket ticket) {
-        // TODO Build close and resolve method.
-        return null;
+        // TODO closeAndResolveTicket needs testing.
+        String successMsg = " was successfully closed without a resolution.";
+        ticket.setStatus(TicketStatus.ClosedResolved);
+        return ticket.getId() + successMsg;
     }
 
     @Override
@@ -175,9 +177,9 @@ public class TechnicianLevelOne implements TechnicianInterface{
         else return "Ticket count cannot be made negative.";
     }
 
-    @Override
-    public String archiveTicket(Ticket ticket) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    // @Override
+    // public String archiveTicket(Ticket ticket) {
+    //     
+    //     return null;
+    // }
 }

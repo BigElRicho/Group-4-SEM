@@ -26,7 +26,7 @@ public interface TechnicianInterface{
 
     public String closeAndResolveTicket(Ticket ticket);
 
-    public String archiveTicket(Ticket ticket);
+    // public String archiveTicket(Ticket ticket);
 
     public String changeUsername(String newUsername);
 
