@@ -1,7 +1,7 @@
 
 public class Ticket 
 {
-    String TicketAuthor; //The staff member who created the ticket, this should maybe be the email as it is unique? --please make username--
+    String TicketAuthor; //The staff member who created the ticket, this should maybe be the email as it is unique?
     String Description;
     String TicketID;
     TicketSeverity Severity; //Enum as it can only be a select few values
