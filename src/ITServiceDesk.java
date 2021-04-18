@@ -306,8 +306,10 @@ class ITServiceDesk{
         }
         // Gets details of IT issue for ticket
         System.out.println(
-        "\n\nTicket author: " + accountName + "\n"+
-        "Please complete the following information");
+        "\nSubmit New Ticket" +
+        "\n-----------------" +
+        "\nTicket author: " + accountName +
+        "\nPlease complete the following information");
         System.out.print("Description: ");
         String description = input.nextLine();
         System.out.print("Severity of issue (low, medium, high): ");
@@ -360,11 +362,6 @@ class ITServiceDesk{
                         "\nOpen Date: " + ticket[i].OpenDate + 
                         "\nStatus: " + ticket[i].getStatus());
                 }
-                else{
-                    System.out.println("You do not have any open tickets");
-                }
-            }else{
-                System.out.println("You do not have any open tickets");
             }
         }    
     }
