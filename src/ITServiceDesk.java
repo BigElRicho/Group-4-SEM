@@ -1,17 +1,19 @@
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 class ITServiceDesk{
 
     static Scanner input = new Scanner(System.in);
-    static Staff[] staffAccount = new Staff[20];
+    static Staff[] staffAccount = new Staff[50];
     static TechnicianInterface[] technicianAccounts = new TechnicianInterface[50];
     static int technicianAccountCount = 5;
     static int staffAccountCount = 0;
-    static Ticket[] ticket = new Ticket[20];
+    static Ticket[] ticket = new Ticket[50];
     static int ticketCount = 0;
     static int menuChoice;
     static Boolean loggedIn = false;
     static String accountName = "";
+    static String accountEmail = "";
     static Ticket archivedTickets[] = new Ticket[100];
     static Ticket[] tempTickets = new Ticket[1];
 
@@ -58,7 +60,8 @@ class ITServiceDesk{
                 if(menuChoice == 4){
                     technicianLogin();
                 }
-                if(menuChoice == 9){// Currently used for testing information stored in arrays
+                // Used for testing information stored in arrays
+                if(menuChoice == 9){// Used for testing information stored in arrays
                     testArray();
                 }
             }else{
@@ -88,10 +91,9 @@ class ITServiceDesk{
                     submitTicket();
                 }
                 if(menuChoice == 3){
-                    System.out.println("This feature coming soon");
-                        // checkTicketStatus();
+                    checkTicketStatus();
                 }
-                if(menuChoice == 9){// Currently used for testing information stored in arrays
+                if(menuChoice == 9){
                     testArray();
                 }
             }
@@ -124,6 +126,7 @@ class ITServiceDesk{
             // Checks if entered password is correct
             if(temp.getPassword().equals(passwordInput)){
             accountName = temp.getName();
+            accountEmail = temp.getEmail();
             loggedIn = true;
             }else{
                 System.out.println("\nIncorrect Password");
@@ -134,8 +137,10 @@ class ITServiceDesk{
     //Forgot password feature
     public static void forgotPassword() {
         // Gets users email address
-        System.out.print("Forgot Password\n"+
-        "Enter email: ");
+        System.out.print(
+            "\nForgot Password\n" +
+            "---------------\n" +
+            "Enter email: ");
         String email = input.nextLine();
         // Uses the unique email to find the account
         for (int i = 0; i < staffAccountCount; i++){
@@ -145,8 +150,16 @@ class ITServiceDesk{
                 // User enters new password
                 System.out.print("Enter new password: ");
                 String newPassword = input.nextLine();
+
+                // Validates user input for password rules
+                while(!passwordValidation(newPassword)){       
+                    System.out.print("Password: ");
+                    newPassword = input.nextLine();
+                }
                 // Users password is reset to new password
                 staffAccount[i].ResetPassword(oldPassword, newPassword);
+            }else{
+                System.out.println("This email does not have an account");
             }
         }
     }
@@ -162,6 +175,13 @@ class ITServiceDesk{
         String phoneNumber = input.nextLine();
         System.out.print("Password: ");
         String password = input.nextLine();
+
+        // Validates user input for password rules
+        while(!passwordValidation(password)){       
+            System.out.print("Password: ");
+            password = input.nextLine();
+        }
+
         Staff temp = null;
         // Searches staffAccount array for duplicate email
         for (int i = 0; i < staffAccountCount; i++){
@@ -197,6 +217,33 @@ class ITServiceDesk{
                 welcomeMenu();
             }
         }
+    }
+
+    // Validates user input for password
+    public static boolean passwordValidation(String password){
+        boolean isValid = true;
+        // Tests for password length of at least 20
+        if(password.length() < 20){
+            System.out.println("**Password must be at least 20 characters");
+            isValid = false;
+        }
+        // Tests for lowercase characters
+        if(!Pattern.compile("[a-z]").matcher(password).find()){
+            System.out.println("**Password must contain at least one lowercase character");
+            isValid = false;
+        }
+        // Tests for uppercase characters
+        if(!Pattern.compile("[A-Z]").matcher(password).find()){
+            System.out.println("**Password must contain at least one uppercase character");
+            isValid = false;
+        }
+        // Tests for numbers
+        if(!Pattern.compile("[0-9]").matcher(password).find()){
+            System.out.println("**Password must contain at least one number");
+            isValid = false;
+        }
+        // Returns true or false
+        return isValid;
     }
 
     public static void technicianLogin() {
@@ -252,37 +299,17 @@ class ITServiceDesk{
         
     }
 
-    // Currently used for testing information stored in arrays
-    public static void testArray() {
-        //Test for staff accounts
-        System.out.println("\nstaffAccount Array");
-        for (int i = 0; i < staffAccountCount; i++){
-            System.out.println("Name: " + staffAccount[i].getName());
-            System.out.println("Email: " + staffAccount[i].getEmail());
-            System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
-            System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
-        }
-        // Test for tickets
-        System.out.println("\nTicket Array");
-        for (int i = 0; i < ticketCount; i++){
-            System.out.println("Author: " + ticket[i].getTicketAuthor());
-            System.out.println("Descrip: " + ticket[i].getDescription());
-            System.out.println("Severity: " + ticket[i].getSeverity());
-            System.out.println("Status: " + ticket[i].getStatus());
-            System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
-        }
-    }
-
     // Submit ticket
     public static void submitTicket() {
-        // Gets details of IT issue for ticket
-        
         if(loggedIn == false){
             staffLogin();
         }
+        // Gets details of IT issue for ticket
         System.out.println(
-        "\n\nTicket author: " + accountName + "\n"+
-        "Please complete the following information");
+        "\nSubmit New Ticket" +
+        "\n-----------------" +
+        "\nTicket author: " + accountName +
+        "\nPlease complete the following information");
         System.out.print("Description: ");
         String description = input.nextLine();
         System.out.print("Severity of issue (low, medium, high): ");
@@ -293,15 +320,15 @@ class ITServiceDesk{
         //If yes to submit, checks user input for severity and assigns correct enum
         if (submit.equalsIgnoreCase("Y")){
             if(severity.equalsIgnoreCase("LOW")){
-                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Low);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, accountEmail, description, TicketSeverity.Low);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("MEDIUM")){
-                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.Medium);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, accountEmail, description, TicketSeverity.Medium);
                 ticketCount++;
             }
             else if(severity.equalsIgnoreCase("HIGH")){
-                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, description, TicketSeverity.High);
+                ticket[ticketCount] = new Ticket(Integer.toString(ticketCount), accountName, accountEmail, description, TicketSeverity.High);
                 ticketCount++;
             }
             else{// Error in submitting ticket returns user to beginning of ticket process.
@@ -316,6 +343,27 @@ class ITServiceDesk{
             System.out.println("Unexpected error.");
             welcomeMenu();
         }
+    }
+
+    public static void checkTicketStatus(){
+        System.out.println(
+            "\nTicket Status\n" +
+            "-------------\n" +
+            "All open tickets submitted by " + accountName);
+        for (int i = 0; i < ticketCount; i++){
+            // Finds the correct user by their unique email
+            if (ticket[i].getAuthorEmail() == accountEmail){
+                // Displays all open tickets the user has submitted
+                if(ticket[i].getStatus() == TicketStatus.Open){
+                    System.out.println(
+                        "\nTicket ID: " + ticket[i].getId() + 
+                        "\nDescription: " + ticket[i].getDescription() + 
+                        "\nSeverity: " + ticket[i].getSeverity() +
+                        "\nOpen Date: " + ticket[i].OpenDate + 
+                        "\nStatus: " + ticket[i].getStatus());
+                }
+            }
+        }    
     }
 
     public static void setupTechnicians(){
@@ -339,6 +387,28 @@ class ITServiceDesk{
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
             System.out.println("Technician Account " + technicianAccounts[i].getUsername() + " loaded.");
+        }
+    }
+
+    // Currently used for testing information stored in arrays
+    public static void testArray() {
+        //Test for staff accounts
+        System.out.println("\nstaffAccount Array");
+        for (int i = 0; i < staffAccountCount; i++){
+            System.out.println("Name: " + staffAccount[i].getName());
+            System.out.println("Email: " + staffAccount[i].getEmail());
+            System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
+            System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
+        }
+        // Test for tickets
+        System.out.println("\nTicket Array");
+        for (int i = 0; i < ticketCount; i++){
+            System.out.println("Author: " + ticket[i].getTicketAuthor());
+            System.out.println("AuthorEmail: " + ticket[i].getAuthorEmail());
+            System.out.println("Descrip: " + ticket[i].getDescription());
+            System.out.println("Severity: " + ticket[i].getSeverity());
+            System.out.println("Status: " + ticket[i].getStatus());
+            System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
         }
     }
 }
