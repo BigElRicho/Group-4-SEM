@@ -1,3 +1,5 @@
+
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -8,7 +10,8 @@ class ITServiceDesk{
     static TechnicianInterface[] technicianAccounts = new TechnicianInterface[50];
     static int technicianAccountCount = 5;
     static int staffAccountCount = 0;
-    static Ticket[] ticket = new Ticket[50];
+    static String loggedinUserType = "";
+    static Ticket[] ticket = new Ticket[20];
     static int ticketCount = 0;
     static int menuChoice;
     static Boolean loggedIn = false;
@@ -72,6 +75,10 @@ class ITServiceDesk{
                     "1. Logout\n"+
                     "2. Submit new ticket\n"+
                     "3. Check Status of ticket\n"+
+                    "4. Change Ticket Severity\n"+
+                    "5. Display all archived tickets\n" +
+                    "6. View closed tickets\n"+
+                    "7. View all assigned tickets\n"+
                     //"9. TEST ARRAYS\n"+
                     "0. Exit");
         
@@ -93,7 +100,24 @@ class ITServiceDesk{
                 if(menuChoice == 3){
                     checkTicketStatus();
                 }
-                if(menuChoice == 9){
+                if(menuChoice == 4){
+                    ChangeTicketSeverity();
+                }
+                if(menuChoice == 5){
+                    int i=0;
+                    // System.out.println("This feature is coming soon");
+                    while(archivedTickets[i] != null)
+                    {
+                        System.out.println(archivedTickets[i]);
+                    }
+                }
+                if(menuChoice == 6){
+                    System.out.println("This feature is coming soon");
+                }
+                if(menuChoice == 7){
+                    System.out.println("This feature is coming soon");
+                }
+                if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
                 }
             }
@@ -128,6 +152,7 @@ class ITServiceDesk{
             accountName = temp.getName();
             accountEmail = temp.getEmail();
             loggedIn = true;
+            loggedinUserType = "staff";
             }else{
                 System.out.println("\nIncorrect Password");
             }
@@ -279,8 +304,6 @@ class ITServiceDesk{
             }
         }
         
-        
-
         //Get and check password.
         while(passwordMatches == false){
             System.out.println(passwordPrompt);
@@ -291,6 +314,7 @@ class ITServiceDesk{
                     loggedIn = true;
                     passwordMatches = true;
                     accountName = technicianAccounts[foundAccountIndex].getUsername();
+                    loggedinUserType = "Technician";
                 }
                 else{
                     System.out.println(pwIncorrectMsg);
@@ -298,6 +322,28 @@ class ITServiceDesk{
         }
         
     }
+
+    // Currently used for testing information stored in arrays
+    public static void testArray() {
+        //Test for staff accounts
+        System.out.println("\nstaffAccount Array");
+        for (int i = 0; i < staffAccountCount; i++){
+            System.out.println("Name: " + staffAccount[i].getName());
+            System.out.println("Email: " + staffAccount[i].getEmail());
+            System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
+            System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
+        }
+        // Test for tickets
+        System.out.println("\nTicket Array");
+        for (int i = 0; i < ticketCount; i++){
+            System.out.println("Author: " + ticket[i].getTicketAuthor());
+            System.out.println("Descrip: " + ticket[i].getDescription());
+            System.out.println("Severity: " + ticket[i].getSeverity());
+            System.out.println("Status: " + ticket[i].getStatus());
+            System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
+        }
+    }
+
 
     // Submit ticket
     public static void submitTicket() {
@@ -383,32 +429,189 @@ class ITServiceDesk{
         technicianAccounts[3] = louisTomlinson;
         technicianAccounts[4] = zayneMalick;
 
-        
+        technicianAccounts[0].getCurrentTicketList()[0] = ticket[0];
+        technicianAccounts[0].getCurrentTicketList()[1] = ticket[1];
+
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
             System.out.println("Technician Account " + technicianAccounts[i].getUsername() + " loaded.");
         }
     }
 
-    // Currently used for testing information stored in arrays
-    public static void testArray() {
-        //Test for staff accounts
-        System.out.println("\nstaffAccount Array");
-        for (int i = 0; i < staffAccountCount; i++){
-            System.out.println("Name: " + staffAccount[i].getName());
-            System.out.println("Email: " + staffAccount[i].getEmail());
-            System.out.println("Phone: " + staffAccount[i].getPhoneNumber());
-            System.out.println("Password: " + staffAccount[i].getPassword()+"\n");
+        //Method used for checking the tempTicket array. If there is a ticket found
+    //It will atempt to assign it based on severity and technician with the lowest ticket count
+    private static void ReAssignTicket()
+    {
+        if(tempTickets.length > 1)
+        {
+            AssignTicket(tempTickets[0]);
         }
-        // Test for tickets
-        System.out.println("\nTicket Array");
-        for (int i = 0; i < ticketCount; i++){
-            System.out.println("Author: " + ticket[i].getTicketAuthor());
-            System.out.println("AuthorEmail: " + ticket[i].getAuthorEmail());
-            System.out.println("Descrip: " + ticket[i].getDescription());
-            System.out.println("Severity: " + ticket[i].getSeverity());
-            System.out.println("Status: " + ticket[i].getStatus());
-            System.out.println("openDate: " + ticket[i].getOpenDate()+"\n");
+
+        tempTickets[0] = null;
+    }
+
+    //Assign ticket to technician
+    private static void AssignTicket(Ticket ticket)
+    {
+        int LowestTicketCount = 0;
+        int RequiredTechnicianLevel;
+        int TechnicianIndex = 0;
+
+        //If a tickets severity is HIGH, then  it should be assigned to a level 2 tech
+        //Otherwise it can go to a level 1 tech
+        if(ticket.getSeverity() == TicketSeverity.High)
+        {
+            RequiredTechnicianLevel = 2;
         }
+        else
+        {
+            RequiredTechnicianLevel = 1;
+        }
+
+        //Find the technician with the lowest ticket count
+        for(int i = 0; i < technicianAccountCount; i++)
+        {         
+            //If this is the first time through the loop, set default values
+            if(i == 0)
+            {
+                LowestTicketCount = technicianAccounts[i].getNumberOfTicketsCurrentlyAssigned();
+            }
+            else if(Objects.nonNull(technicianAccounts[i])) //Make sure its not a null object
+            {
+                //If the current techs level is correct and they have a lower ticket count than the previous tech
+                if(technicianAccounts[i].getTechnicianLevel() == RequiredTechnicianLevel && technicianAccounts[i].getNumberOfTicketsCurrentlyAssigned() < LowestTicketCount)
+                {
+                    //Make note of their index and assign the new lowest ticket count
+                    TechnicianIndex = i;
+                    LowestTicketCount = technicianAccounts[i].getNumberOfTicketsCurrentlyAssigned();
+                }
+            }
+        }
+        
+        //Insert the new ticket -> Consider making this a method in the technician to avoid errors
+        technicianAccounts[TechnicianIndex].getCurrentTicketList()[LowestTicketCount] = ticket;
+    }
+
+    //Validate Technician is Currently loged in
+    private static int ValidateCurrentUserTechnician()
+    {
+        if(loggedIn != false)
+        {
+            int index  = 0;
+            for (TechnicianInterface t : technicianAccounts) 
+            {
+                if(t.getUsername().equals(accountName))
+                {
+                    //return the technicians index in the array
+                    return index;
+                }
+                index++;
+            }
+        }
+
+        //Not a technician
+        return -1;
+    }
+
+    //Escalate Ticket
+    public static void ChangeTicketSeverity()
+    {
+        int TechnicianIndex = ValidateCurrentUserTechnician();
+        
+        //If the technician is in the array
+        if(TechnicianIndex >= 0)
+        {
+            System.out.println(String.format("You currently have %d tickets assigned to you\n", technicianAccounts[TechnicianIndex].getNumberOfTicketsCurrentlyAssigned()));
+            
+            //Print technicians ticket list
+            for(Ticket t : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+            {
+                if(t != null) //Because we can have null objects
+                {
+                    System.out.println(t);
+                }
+            }
+
+                System.out.println("Enter the ticket ID of the ticket you wish to escalate: ");
+
+                String TicketID = input.nextLine();
+
+                for(Ticket ticket : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+                {
+                    if(Objects.nonNull(ticket) && ticket.getId().equals(TicketID)) // Avoid null objects
+                    {
+                        System.out.println("What severity level would you like to escalte this ticket to?\n1. Low\n2. Medium\n3. High");
+                        
+                        int newLevel = input.nextInt();
+
+                        //Change severity based on the input 1 -> 3
+                        switch(newLevel)
+                        {
+                            case 1: 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Low);
+                                break;
+                            case 2: 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Medium);
+                                break;
+                            case 3: 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.High);
+                                break;
+                            default: 
+                                System.out.println("Error. Be sure to enter a number 1-3\n");
+                        }
+
+                        //Check to see if the ticket needs to be reassigned
+                        ReAssignTicket();
+                    }
+                }
+
+                System.out.println("Invalid Ticket ID, please try again\n");
+        }
+        else
+        {
+            System.out.println("This feature is only available for technicians.\n");
+        }
+    }
+
+    public static String setupTestTickets(){
+        String setupMsg = "Test tickets have been created:";
+
+        //Create a few tickets
+        Ticket ticket1 = new Ticket("1", "test1@test.com","Tester 1", "Test 1");
+        Ticket ticket2 = new Ticket("2", "test2@test.com","Tester 2", "Test 2" );
+        Ticket ticket3 = new Ticket("3", "test1@test.com","Tester 1", "Test 3");
+        Ticket ticket4 = new Ticket("4", "test2@test.com","Tester 2", "Test 4");
+        Ticket ticket5 = new Ticket("5", "test1@test.com","Tester 1", "Test 5");
+        Ticket ticket6 = new Ticket("6", "test2@test.com","Tester 2", "Test 6");
+        Ticket ticket7 = new Ticket("7", "test1@test.com","Tester 1", "Test 7");
+        Ticket ticket8 = new Ticket("8", "test2@test.com","Tester 2", "Test 8");
+        Ticket ticket9 = new Ticket("9", "test1@test.com","Tester 1", "Test 9");
+        Ticket ticket10 = new Ticket("10", "test2@test.com","Tester 2", "Test 10");
+
+        ticket[0] = ticket1;
+        ticket[1] = ticket2;
+        ticket[2] = ticket3;
+        ticket[3] = ticket4;
+        ticket[4] = ticket5;
+        ticket[5] = ticket6;
+        ticket[6] = ticket7;
+        ticket[7] = ticket8;
+        ticket[8] = ticket9;
+        ticket[9] = ticket10;
+
+        return setupMsg;
+    }
+
+    public static String setupTestStaffAccounts(){
+        String setupMsg = "Test staff accounts have been loaded.";
+
+        //Create a couple staff accounts.
+        Staff staff1 = new Staff("test1@test.com", "Tester 1", "0498765432", "test1");
+        Staff staff2 = new Staff("test2@test.com", "Tester 2", "0412345678", "test2");
+        //Store them.
+        staffAccount[0] = staff1;
+        staffAccount[1] = staff2;
+
+        return setupMsg;
     }
 }

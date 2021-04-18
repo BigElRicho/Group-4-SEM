@@ -8,6 +8,10 @@ public interface TechnicianInterface{
 
     public Ticket[] getCurrentTicketList();
 
+    public String addTicket(Ticket ticket);
+
+    public String modifyTicketCount(int modifier);
+
     public String getFirstName();
 
     public String getLastName();
@@ -22,7 +26,11 @@ public interface TechnicianInterface{
 
     public String closeAndResolveTicket(Ticket ticket);
 
+    // public String archiveTicket(Ticket ticket);
+
     public String changeUsername(String newUsername);
 
     public String changePassword(String newPassword);
+
+    public void displayCurrentTickets();
 }

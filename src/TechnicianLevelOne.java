@@ -34,7 +34,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
     @Override
     @Description("Changes the issue from level 1 to level 2.")
     public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
-        // TODO perform testing on this function
+        // TODO changeTicketSeverity needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
@@ -59,14 +59,19 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     @Override
     public String closeTicketWithoutResolution(Ticket ticket) {
-        // TODO Build close without resolution function.
-        return null;
+        // TODO closeTicketWithoutResolution needs testing.
+        String successMsg = " was successfully closed without a resolution.";
+        //String failMsg = "Something went wrong while trying to close the ticket.";
+            ticket.setStatus(TicketStatus.ClosedUnresolved);
+            return ticket.getId() + successMsg;
     }
 
     @Override
     public String closeAndResolveTicket(Ticket ticket) {
-        // TODO Build close and resolve method.
-        return null;
+        // TODO closeAndResolveTicket needs testing.
+        String successMsg = " was successfully closed without a resolution.";
+        ticket.setStatus(TicketStatus.ClosedResolved);
+        return ticket.getId() + successMsg;
     }
 
     @Override
@@ -125,15 +130,34 @@ public class TechnicianLevelOne implements TechnicianInterface{
         return currentTicketList;
     }
 
+    public void displayCurrentTickets(){
+        //TODO displayCurrentTickets() needs testing.
+        if(numberOfTicketsCurrentlyAssigned == 0){
+            System.out.println("No tickets currently assigned.");
+        }
+        else{
+            System.out.println("--Current Tickets--");
+            for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
+                System.out.println("Ticket Id: " + currentTicketList[i].TicketID);
+                System.out.println("Ticket Author: " + currentTicketList[i].TicketAuthor);
+                System.out.println("Author Email: " + currentTicketList[i].AuthorEmail);
+                System.out.println("Ticket Description: " + currentTicketList[i].Description);
+                System.out.println("Ticket Severity: " + currentTicketList[i].Severity.toString());
+                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString());
+            }
+        }
+    }
+
     private String removeTicketfromList(Ticket ticket){
 
         String successMsg = " removed from this technicians list.";
         String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
 
         //Find the ticket and remove from list
-        for(int i = 0;i < getCurrentTicketList().length;i++){
+        for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
             if(currentTicketList[i].getId() == ticket.getId()){
                 currentTicketList[i].equals(null);
+                modifyTicketCount(-1);
                 return ticket.getId() + successMsg;
             }
         }
@@ -142,7 +166,38 @@ public class TechnicianLevelOne implements TechnicianInterface{
     }
 
     @Override
+    public String addTicket(Ticket ticket) {
+        String successMsg = " was successfully added.";
+        String failMsg = "Ticket was unable to be added. Try again";
+
+        if(ticket != null){
+            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticket;
+            modifyTicketCount(1);
+            return ticket.getId() + successMsg;
+        }
+        else{
+           return failMsg;
+        }
+    }
+
+    @Override
     public String toString(){
         return this.firstName +" "+ this.lastName;
     }
+
+    @Override
+    public String modifyTicketCount(int modifier) {
+        String oldCount = Integer.toString(numberOfTicketsCurrentlyAssigned);
+        if(numberOfTicketsCurrentlyAssigned >= 0){
+            numberOfTicketsCurrentlyAssigned += modifier;
+            return "ticket count updated from" + oldCount + "to:" + numberOfTicketsCurrentlyAssigned;
+        }
+        else return "Ticket count cannot be made negative.";
+    }
+
+    // @Override
+    // public String archiveTicket(Ticket ticket) {
+    //     
+    //     return null;
+    // }
 }
