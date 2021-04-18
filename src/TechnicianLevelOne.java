@@ -34,7 +34,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
     @Override
     @Description("Changes the issue from level 1 to level 2.")
     public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
-        // TODO perform testing on this function
+        // TODO changeTicketSeverity needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
@@ -128,6 +128,24 @@ public class TechnicianLevelOne implements TechnicianInterface{
     @Override
     public Ticket[] getCurrentTicketList() {
         return currentTicketList;
+    }
+
+    public void displayCurrentTickets(){
+        //TODO displayCurrentTickets() needs testing.
+        if(numberOfTicketsCurrentlyAssigned == 0){
+            System.out.println("No tickets currently assigned.");
+        }
+        else{
+            System.out.println("--Current Tickets--");
+            for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
+                System.out.println("Ticket Id: " + currentTicketList[i].TicketID);
+                System.out.println("Ticket Author: " + currentTicketList[i].TicketAuthor);
+                System.out.println("Author Email: " + currentTicketList[i].AuthorEmail);
+                System.out.println("Ticket Description: " + currentTicketList[i].Description);
+                System.out.println("Ticket Severity: " + currentTicketList[i].Severity.toString());
+                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString());
+            }
+        }
     }
 
     private String removeTicketfromList(Ticket ticket){

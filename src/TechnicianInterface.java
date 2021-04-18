@@ -31,4 +31,6 @@ public interface TechnicianInterface{
     public String changeUsername(String newUsername);
 
     public String changePassword(String newPassword);
+
+    public void displayCurrentTickets();
 }

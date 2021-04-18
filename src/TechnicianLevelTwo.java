@@ -31,7 +31,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
 
     @Override
     public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
-        // TODO Perform testing on this function.
+        // TODO changeTicketSeverity needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
@@ -86,24 +86,21 @@ public class TechnicianLevelTwo implements TechnicianInterface{
         }
     }
 
-    // TODO closeTicketWithoutResolution function.
+    // TODO closeTicketWithoutResolution function needs testing.
     @Override
     public String closeTicketWithoutResolution(Ticket ticket) {
         String successMsg = " has been closed without a resolution.";
-        String failMsg = "Something went wrong while closing the ticket. Try again";
 
-        if(ticket.setStatus(TicketStatus.ClosedUnresolved)){
-            return ticket.getId() + successMsg;
-        }
-        else{
-            return failMsg;
-        }        
+        ticket.setStatus(TicketStatus.ClosedUnresolved);
+         return ticket.getId() + successMsg;
     }
 
     @Override
     public String closeAndResolveTicket(Ticket ticket) {
-        // TODO closeAndResolveTicket function
-        return null;
+        // TODO closeAndResolveTicket needs testing.
+        String successMsg = " was successfully closed without a resolution.";
+        ticket.setStatus(TicketStatus.ClosedResolved);
+        return ticket.getId() + successMsg;
     }
 
     @Override
@@ -167,6 +164,25 @@ public class TechnicianLevelTwo implements TechnicianInterface{
             return "ticket count updated from" + oldCount + "to:" + numberOfTicketsCurrentlyAssigned;
         }
         else return "Ticket count cannot be made negative.";
+    }
+
+    @Override
+    public void displayCurrentTickets() {
+        // TODO displayCurrentTickets() needs testing.
+        if(numberOfTicketsCurrentlyAssigned == 0){
+            System.out.println("No tickets currently assigned.");
+        }
+        else{
+            System.out.println("--Current Tickets--");
+            for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
+                System.out.println("Ticket Id: " + currentTicketList[i].TicketID);
+                System.out.println("Ticket Author: " + currentTicketList[i].TicketAuthor);
+                System.out.println("Author Email: " + currentTicketList[i].AuthorEmail);
+                System.out.println("Ticket Description: " + currentTicketList[i].Description);
+                System.out.println("Ticket Severity: " + currentTicketList[i].Severity.toString());
+                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString());
+            }
+        }
     }
 
     // @Override

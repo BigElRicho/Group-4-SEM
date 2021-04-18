@@ -76,9 +76,9 @@ class ITServiceDesk{
                     "2. Submit new ticket\n"+
                     "3. Check Status of ticket\n"+
                     "4. Change Ticket Severity\n"+
-                    "5. Display all archived tickets" +
-                    "6. View closed tickets"+
-                    "7. View all assigned tickets"+
+                    "5. Display all archived tickets\n" +
+                    "6. View closed tickets\n"+
+                    "7. View all assigned tickets\n"+
                     //"9. TEST ARRAYS\n"+
                     "0. Exit");
         
@@ -104,7 +104,12 @@ class ITServiceDesk{
                     ChangeTicketSeverity();
                 }
                 if(menuChoice == 5){
-                    System.out.println("This feature is coming soon");
+                    int i=0;
+                    // System.out.println("This feature is coming soon");
+                    while(archivedTickets[i] != null)
+                    {
+                        System.out.println(archivedTickets[i]);
+                    }
                 }
                 if(menuChoice == 6){
                     System.out.println("This feature is coming soon");
@@ -147,6 +152,7 @@ class ITServiceDesk{
             accountName = temp.getName();
             accountEmail = temp.getEmail();
             loggedIn = true;
+            loggedinUserType = "staff";
             }else{
                 System.out.println("\nIncorrect Password");
             }
@@ -308,6 +314,7 @@ class ITServiceDesk{
                     loggedIn = true;
                     passwordMatches = true;
                     accountName = technicianAccounts[foundAccountIndex].getUsername();
+                    loggedinUserType = "Technician";
                 }
                 else{
                     System.out.println(pwIncorrectMsg);
