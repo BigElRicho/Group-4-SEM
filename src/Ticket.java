@@ -33,6 +33,19 @@ public class Ticket
         setOpenDate();
     }
 
+    //For Testing
+    public Ticket(String id, String auth, String authEmail, String desc, TicketSeverity severity, String open, String closed)
+    {
+        TicketID = id;
+        TicketAuthor = auth;
+        AuthorEmail = authEmail;
+        Description = desc;
+        setOpenDate(open);
+        setClosedDate(closed);
+        setSeverity(severity);
+        setOpenDate();
+    }
+
     /* Getters and Setters */
 
     //Only need getter, should not be changed after initialization.
@@ -129,6 +142,11 @@ public class Ticket
         OpenDate = new CustomDateTime();
     }
 
+    public void setOpenDate(String dateAsString) 
+    {
+        OpenDate = new CustomDateTime(dateAsString);
+    }
+
     public CustomDateTime getClosedDate() 
     {
         //Check if null first
@@ -151,6 +169,11 @@ public class Ticket
         }
         
         System.out.println(String.format("Ticket is already closed (%s).", getClosedDate()));
+    }
+
+    public void setClosedDate(String dateAsString) 
+    {
+        ClosedDate = new CustomDateTime(dateAsString);
     }
 
     /* Override methods */

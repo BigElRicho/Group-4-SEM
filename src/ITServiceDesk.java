@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -22,6 +23,7 @@ class ITServiceDesk{
 
     public static void main (String[] args){
         setupTechnicians();
+        setupTestTickets();
         welcomeMenu();
     }
     
@@ -119,6 +121,10 @@ class ITServiceDesk{
                 }
                 if(menuChoice == 9){// Currently used for testing information stored in arrays
                     testArray();
+                }
+                if(menuChoice == 10)
+                {
+                    GenerateReport();
                 }
             }
         }
@@ -613,5 +619,70 @@ class ITServiceDesk{
         staffAccount[1] = staff2;
 
         return setupMsg;
+    }
+
+    private static boolean CreateReport(CustomDateTime startDate, CustomDateTime endDate)
+    {
+        ArrayList<Ticket> tempArrayList = new ArrayList<Ticket>();
+
+        for(Ticket t : ticket)
+        {
+            if(Objects.nonNull(t))
+            {
+                if(t.getOpenDate().After(startDate) && t.Status == TicketStatus.Open)
+                {
+                    tempArrayList.add(t);
+                }
+                else if(t.Status != TicketStatus.Open)
+                {
+                    if(t.getOpenDate().After(startDate) && t.getClosedDate().Before(endDate))
+                    {
+                        tempArrayList.add(t);
+                    }
+                }
+            }
+        }
+
+        //If there are not tickets for the report
+        if(tempArrayList.size() > 0)
+        {
+            TicketReport report = new TicketReport(tempArrayList);
+
+            report.PrintReport();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void GenerateReport()
+    {
+        CustomDateTime startDate, endDate;
+        
+        try{
+            System.out.println("You must specifcy a start and end date for the report.\nPlease specify the START date for the reporting period (as format dd.mm.yyyy): ");
+        
+            startDate = new CustomDateTime(input.nextLine());
+    
+            System.out.println("Please specify the END date for the reporting period (as format dd.mm.yyyy): ");
+
+            endDate = new CustomDateTime(input.nextLine());
+
+            //Try and generate the report for the dates specified
+            if(!CreateReport(startDate, endDate))
+            {
+                //If something went wrong
+                System.out.println("Unable to generate report, please try again\n");
+            };
+
+        }
+        catch(Exception exc)
+        {
+            System.out.println(String.format("Error thrown %s", exc));
+        }
+
+       
+
     }
 }
