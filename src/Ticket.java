@@ -10,6 +10,7 @@ public class Ticket
     Boolean Archived = false;
     CustomDateTime OpenDate;
     CustomDateTime ClosedDate = null;
+    private String ModifyingTechnician = "";
 
     /* Constructors */
 
@@ -174,6 +175,26 @@ public class Ticket
     public void setClosedDate(String dateAsString) 
     {
         ClosedDate = new CustomDateTime(dateAsString);
+    }
+
+    public String getModifyingTechnician()
+    {
+        return this.ModifyingTechnician;
+    }
+
+    public String setModifyingTechnician(String technicianUsername)
+    {
+        String oldValue = this.ModifyingTechnician;
+        this.ModifyingTechnician = technicianUsername;
+            if(oldValue == "")
+            {
+                return "\nTechnician is now" + getModifyingTechnician();
+            }
+            else
+            {
+                return "The technician was" + oldValue + "." + 
+                "New technician is" + this.getModifyingTechnician();
+            }
     }
 
     /* Override methods */
