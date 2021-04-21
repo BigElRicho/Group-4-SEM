@@ -29,7 +29,6 @@ class ITServiceDesk{
     
     public static void welcomeMenu(){
         do{
-            
             System.out.println(
                 "\nWelcome to Cinco IT Service Desk\n"+
                 "--------------------------------");
@@ -65,22 +64,19 @@ class ITServiceDesk{
                 if(menuChoice == 4){
                     technicianLogin();
                 }
-                // Used for testing information stored in arrays
-                if(menuChoice == 9){// Used for testing information stored in arrays
+                // Hidden menu item used for testing information stored in arrays
+                if(menuChoice == 9){
                     testArray();
                 }
-            }else{
-                //If logged in will display name and give options for tickets
+            // If logged in and user is a staff member
+            }if((loggedIn == true) && (loggedinUserType == "staff")){
+                //Display name and give options for tickets
                 System.out.println(
-                    "You are currently logged in as " + accountName +
+                    "Staff member logged in: " + accountName +
                     "\nPlease select an option to continue\n"+
                     "1. Logout\n"+
                     "2. Submit new ticket\n"+
                     "3. Check Status of ticket\n"+
-                    "4. Change Ticket Severity\n"+
-                    "5. Display all archived tickets\n" +
-                    "6. View closed tickets\n"+
-                    "7. View all assigned tickets\n"+
                     //"9. TEST ARRAYS\n"+
                     "0. Exit");
         
@@ -89,7 +85,7 @@ class ITServiceDesk{
                     System.out.println("Please select a number from the menu: ");
                     input.next();
                 }
-                
+
                 menuChoice = input.nextInt();
                 input.nextLine();
 
@@ -119,7 +115,59 @@ class ITServiceDesk{
                 if(menuChoice == 7){
                     System.out.println("This feature is coming soon");
                 }
-                if(menuChoice == 9){// Currently used for testing information stored in arrays
+                // Hidden menu item used for testing information stored in arrays
+                if(menuChoice == 9){
+                    testArray();
+                }
+
+            // If logged in and user is a technician
+            }if((loggedIn == true) && (loggedinUserType == "technician")){
+                //Display name and give options for tickets
+                System.out.println(
+                    "Tecnician logged in: " + accountName +
+                    "\nPlease select an option to continue\n"+
+                    "1. Logout\n"+
+                    "2. View all assigned tickets\n"+
+                    "3. Change Ticket Severity\n"+
+                    "4. Display all archived tickets\n" +
+                    "5. View closed tickets\n"+
+                    //"9. TEST ARRAYS\n"+
+                    "0. Exit");
+        
+                //Loop for input validation
+                while (!input.hasNextInt()) { 
+                    System.out.println("Please select a number from the menu: ");
+                    input.next();
+                }
+                
+                menuChoice = input.nextInt();
+                input.nextLine();
+
+                if(menuChoice == 1){
+                    loggedIn = false;
+                }
+                if(menuChoice == 2){
+                    //viewAssignedTickets
+                    System.out.println("This feature is coming soon");
+                }
+                if(menuChoice == 3){
+                    ChangeTicketSeverity();
+                }
+                if(menuChoice == 4){
+                    int i=0;
+                    // System.out.println("This feature is coming soon");
+                    while(archivedTickets[i] != null)
+                    {
+                        System.out.println(archivedTickets[i]);
+                    }
+                }
+                if(menuChoice == 5){
+                    //viewClosedTickets
+                    System.out.println("This feature is coming soon");
+                }
+
+                // Hidden menu item used for testing information stored in arrays
+                if(menuChoice == 9){
                     testArray();
                 }
                 if(menuChoice == 10)
@@ -159,6 +207,7 @@ class ITServiceDesk{
             accountEmail = temp.getEmail();
             loggedIn = true;
             loggedinUserType = "staff";
+            welcomeMenu();
             }else{
                 System.out.println("\nIncorrect Password");
             }
@@ -320,7 +369,8 @@ class ITServiceDesk{
                     loggedIn = true;
                     passwordMatches = true;
                     accountName = technicianAccounts[foundAccountIndex].getUsername();
-                    loggedinUserType = "Technician";
+                    loggedinUserType = "technician";
+                    welcomeMenu();
                 }
                 else{
                     System.out.println(pwIncorrectMsg);
