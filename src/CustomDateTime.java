@@ -1,17 +1,24 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
-public class CustomDateTime 
+public class CustomDateTime
 {
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     private LocalDateTime date;
 
     public CustomDateTime()
     {
         date = LocalDateTime.now();
     } 
+
+    public CustomDateTime(String dateAsString)
+    {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        setDate(LocalDate.parse(dateAsString, dateFormatter).atTime(LocalTime.parse("00:00:00")));
+    }
     
     public boolean GreaterThanTwentyFourHours()
     {
@@ -27,9 +34,10 @@ public class CustomDateTime
 
     /* Getter and Setters */
 
+    
     public LocalDateTime getDate() 
     {
-        return date;
+        return this.date;
     }
 
     public void setDate(LocalDateTime date) 
@@ -37,11 +45,23 @@ public class CustomDateTime
         this.date = date;
     }
 
+    //Compares if this date is after the date supplied
+    public boolean After(CustomDateTime otherDate)
+    {
+        return getDate().isAfter(otherDate.getDate());
+    }
+
+    //Compares if this date is before the date supplied
+    public boolean Before(CustomDateTime otherDate)
+    {
+        return getDate().isBefore(otherDate.getDate());
+    }
+
     /* Override */
 
     @Override
     public String toString()
     {
-        return dateFormatter.format(date);
+        return dateTimeFormatter.format(date);
     }
 }

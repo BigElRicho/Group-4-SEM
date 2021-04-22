@@ -6,9 +6,11 @@ public interface TechnicianInterface{
 
     public int getNumberOfTicketsCurrentlyAssigned();
 
-    public Ticket[] getCurrentTicketList();
+    public String[] getCurrentTicketList();
 
-    public String addTicket(Ticket ticket);
+    public String addTicket(String ticketID);
+
+    public String removeTicketfromList(String ticketID);
 
     public String modifyTicketCount(int modifier);
 
@@ -20,7 +22,7 @@ public interface TechnicianInterface{
 
     public String getPassword();
 
-    public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity);
+    public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity);
 
     public String closeTicketWithoutResolution(Ticket ticket);
 

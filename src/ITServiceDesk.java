@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ class ITServiceDesk{
     static Ticket[] tempTickets = new Ticket[1];
 
     public static void main (String[] args){
+        setupTestTickets();
         setupTechnicians();
         welcomeMenu();
     }
@@ -145,8 +147,10 @@ class ITServiceDesk{
                     loggedIn = false;
                 }
                 if(menuChoice == 2){
-                    //viewAssignedTickets
-                    System.out.println("This feature is coming soon");
+                    //Find technician with userName that matches account name
+                    //then call displapCurrentTickets on that technician.
+                    technicianAccounts[ValidateCurrentUserTechnician()].displayCurrentTickets();
+                    // System.out.println("This feature is coming soon");
                 }
                 if(menuChoice == 3){
                     ChangeTicketSeverity();
@@ -167,6 +171,10 @@ class ITServiceDesk{
                 // Hidden menu item used for testing information stored in arrays
                 if(menuChoice == 9){
                     testArray();
+                }
+                if(menuChoice == 10)
+                {
+                    GenerateReport();
                 }
             }
         }
@@ -479,13 +487,49 @@ class ITServiceDesk{
         technicianAccounts[3] = louisTomlinson;
         technicianAccounts[4] = zayneMalick;
 
-        technicianAccounts[0].getCurrentTicketList()[0] = ticket[0];
-        technicianAccounts[0].getCurrentTicketList()[1] = ticket[1];
+        technicianAccounts[0].getCurrentTicketList()[0] = ticket[0].TicketID;
+        technicianAccounts[0].modifyTicketCount(1);
+        System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[0]);
+        technicianAccounts[0].getCurrentTicketList()[1] = ticket[1].TicketID;
+        technicianAccounts[0].modifyTicketCount(1);
+
+        System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[1]);
 
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
             System.out.println("Technician Account " + technicianAccounts[i].getUsername() + " loaded.");
         }
+    }
+
+    public static void setupTestTickets(){
+        String setupMsg = "Test tickets have been created";
+
+        //Create a few tickets
+        Ticket ticket1 = new Ticket("1", "test1@test.com","Tester 1", "Test 1");
+        Ticket ticket2 = new Ticket("2", "test2@test.com","Tester 2", "Test 2" );
+        Ticket ticket3 = new Ticket("3", "test1@test.com","Tester 1", "Test 3");
+        Ticket ticket4 = new Ticket("4", "test2@test.com","Tester 2", "Test 4");
+        Ticket ticket5 = new Ticket("5", "test1@test.com","Tester 1", "Test 5");
+        Ticket ticket6 = new Ticket("6", "test2@test.com","Tester 2", "Test 6");
+        Ticket ticket7 = new Ticket("7", "test1@test.com","Tester 1", "Test 7");
+        Ticket ticket8 = new Ticket("8", "test2@test.com","Tester 2", "Test 8");
+        Ticket ticket9 = new Ticket("9", "test1@test.com","Tester 1", "Test 9");
+        Ticket ticket10 = new Ticket("10", "test2@test.com","Tester 2", "Test 10");
+
+        ticket[0] = ticket1;
+        ticket[1] = ticket2;
+        ticket[2] = ticket3;
+        ticket[3] = ticket4;
+        ticket[4] = ticket5;
+        ticket[5] = ticket6;
+        ticket[6] = ticket7;
+        ticket[7] = ticket8;
+        ticket[8] = ticket9;
+        ticket[9] = ticket10;
+
+        ticketCount = 10;
+
+       System.out.println(setupMsg);
     }
 
         //Method used for checking the tempTicket array. If there is a ticket found
@@ -539,7 +583,7 @@ class ITServiceDesk{
         }
         
         //Insert the new ticket -> Consider making this a method in the technician to avoid errors
-        technicianAccounts[TechnicianIndex].getCurrentTicketList()[LowestTicketCount] = ticket;
+        technicianAccounts[TechnicianIndex].getCurrentTicketList()[LowestTicketCount] = ticket.TicketID;
     }
 
     //Validate Technician is Currently loged in
@@ -574,37 +618,35 @@ class ITServiceDesk{
             System.out.println(String.format("You currently have %d tickets assigned to you\n", technicianAccounts[TechnicianIndex].getNumberOfTicketsCurrentlyAssigned()));
             
             //Print technicians ticket list
-            for(Ticket t : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+            for(String s : technicianAccounts[TechnicianIndex].getCurrentTicketList())
             {
-                if(t != null) //Because we can have null objects
+                if(s != null) //Because we can have null objects
                 {
-                    System.out.println(t);
+                    System.out.println(s);
                 }
             }
 
                 System.out.println("Enter the ticket ID of the ticket you wish to escalate: ");
 
-                String TicketID = input.nextLine();
-
-                for(Ticket ticket : technicianAccounts[TechnicianIndex].getCurrentTicketList())
-                {
-                    if(Objects.nonNull(ticket) && ticket.getId().equals(TicketID)) // Avoid null objects
+                String ticketIDInput = input.nextLine();
+                    //TODO - unfinished change severity()
+                    if(ITServiceDesk.findTicket(ticketIDInput) != null) // Avoid null objects
                     {
                         System.out.println("What severity level would you like to escalte this ticket to?\n1. Low\n2. Medium\n3. High");
                         
-                        int newLevel = input.nextInt();
+                        String newLevel = input.nextLine();
 
                         //Change severity based on the input 1 -> 3
                         switch(newLevel)
                         {
-                            case 1: 
-                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Low);
+                            case "1": 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticketIDInput, TicketSeverity.Low);
                                 break;
-                            case 2: 
-                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Medium);
+                            case "2": 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticketIDInput, TicketSeverity.Medium);
                                 break;
-                            case 3: 
-                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.High);
+                            case "3": 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticketIDInput, TicketSeverity.High);
                                 break;
                             default: 
                                 System.out.println("Error. Be sure to enter a number 1-3\n");
@@ -612,7 +654,7 @@ class ITServiceDesk{
 
                         //Check to see if the ticket needs to be reassigned
                         ReAssignTicket();
-                    }
+                    // }
                 }
 
                 System.out.println("Invalid Ticket ID, please try again\n");
@@ -621,35 +663,6 @@ class ITServiceDesk{
         {
             System.out.println("This feature is only available for technicians.\n");
         }
-    }
-
-    public static String setupTestTickets(){
-        String setupMsg = "Test tickets have been created:";
-
-        //Create a few tickets
-        Ticket ticket1 = new Ticket("1", "test1@test.com","Tester 1", "Test 1");
-        Ticket ticket2 = new Ticket("2", "test2@test.com","Tester 2", "Test 2" );
-        Ticket ticket3 = new Ticket("3", "test1@test.com","Tester 1", "Test 3");
-        Ticket ticket4 = new Ticket("4", "test2@test.com","Tester 2", "Test 4");
-        Ticket ticket5 = new Ticket("5", "test1@test.com","Tester 1", "Test 5");
-        Ticket ticket6 = new Ticket("6", "test2@test.com","Tester 2", "Test 6");
-        Ticket ticket7 = new Ticket("7", "test1@test.com","Tester 1", "Test 7");
-        Ticket ticket8 = new Ticket("8", "test2@test.com","Tester 2", "Test 8");
-        Ticket ticket9 = new Ticket("9", "test1@test.com","Tester 1", "Test 9");
-        Ticket ticket10 = new Ticket("10", "test2@test.com","Tester 2", "Test 10");
-
-        ticket[0] = ticket1;
-        ticket[1] = ticket2;
-        ticket[2] = ticket3;
-        ticket[3] = ticket4;
-        ticket[4] = ticket5;
-        ticket[5] = ticket6;
-        ticket[6] = ticket7;
-        ticket[7] = ticket8;
-        ticket[8] = ticket9;
-        ticket[9] = ticket10;
-
-        return setupMsg;
     }
 
     public static String setupTestStaffAccounts(){
@@ -663,5 +676,82 @@ class ITServiceDesk{
         staffAccount[1] = staff2;
 
         return setupMsg;
+    }
+
+    private static boolean CreateReport(CustomDateTime startDate, CustomDateTime endDate)
+    {
+        ArrayList<Ticket> tempArrayList = new ArrayList<Ticket>();
+
+        for(Ticket t : ticket)
+        {
+            if(Objects.nonNull(t))
+            {
+                if(t.getOpenDate().After(startDate) && t.Status == TicketStatus.Open)
+                {
+                    tempArrayList.add(t);
+                }
+                else if(t.Status != TicketStatus.Open)
+                {
+                    if(t.getOpenDate().After(startDate) && t.getClosedDate().Before(endDate))
+                    {
+                        tempArrayList.add(t);
+                    }
+                }
+            }
+        }
+
+        //If there are not tickets for the report
+        if(tempArrayList.size() > 0)
+        {
+            TicketReport report = new TicketReport(tempArrayList);
+
+            report.PrintReport();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void GenerateReport()
+    {
+        CustomDateTime startDate, endDate;
+        
+        try{
+            System.out.println("You must specifcy a start and end date for the report.\nPlease specify the START date for the reporting period (as format dd.mm.yyyy): ");
+        
+            startDate = new CustomDateTime(input.nextLine());
+    
+            System.out.println("Please specify the END date for the reporting period (as format dd.mm.yyyy): ");
+
+            endDate = new CustomDateTime(input.nextLine());
+
+            //Try and generate the report for the dates specified
+            if(!CreateReport(startDate, endDate))
+            {
+                //If something went wrong
+                System.out.println("Unable to generate report, please try again\n");
+            };
+
+        }
+        catch(Exception exc)
+        {
+            System.out.println(String.format("Error thrown %s", exc));
+        }
+
+       
+
+    }
+
+    public static Ticket findTicket(String ticketID){
+        for(int i = 0; i<ticketCount;i++){
+            System.out.println("find ticket attempt: " + i);
+            if(ticket[i].getId().equals(ticketID)){
+                return ticket[i];
+            }
+        }
+        //If nothing is found...
+        System.out.println("No ticket found matching: " + ticketID + "\n");
+        return null;
     }
 }

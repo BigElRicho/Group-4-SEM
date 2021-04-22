@@ -10,6 +10,7 @@ public class Ticket
     Boolean Archived = false;
     CustomDateTime OpenDate;
     CustomDateTime ClosedDate = null;
+    private String ModifyingTechnician = "";
 
     /* Constructors */
 
@@ -29,6 +30,19 @@ public class Ticket
         TicketAuthor = auth;
         AuthorEmail = authEmail;
         Description = desc;
+        setSeverity(severity);
+        setOpenDate();
+    }
+
+    //For Testing
+    public Ticket(String id, String auth, String authEmail, String desc, TicketSeverity severity, String open, String closed)
+    {
+        TicketID = id;
+        TicketAuthor = auth;
+        AuthorEmail = authEmail;
+        Description = desc;
+        setOpenDate(open);
+        setClosedDate(closed);
         setSeverity(severity);
         setOpenDate();
     }
@@ -129,6 +143,11 @@ public class Ticket
         OpenDate = new CustomDateTime();
     }
 
+    public void setOpenDate(String dateAsString) 
+    {
+        OpenDate = new CustomDateTime(dateAsString);
+    }
+
     public CustomDateTime getClosedDate() 
     {
         //Check if null first
@@ -151,6 +170,31 @@ public class Ticket
         }
         
         System.out.println(String.format("Ticket is already closed (%s).", getClosedDate()));
+    }
+
+    public void setClosedDate(String dateAsString) 
+    {
+        ClosedDate = new CustomDateTime(dateAsString);
+    }
+
+    public String getModifyingTechnician()
+    {
+        return this.ModifyingTechnician;
+    }
+
+    public String setModifyingTechnician(String technicianUsername)
+    {
+        String oldValue = this.ModifyingTechnician;
+        this.ModifyingTechnician = technicianUsername;
+            if(oldValue == "")
+            {
+                return "\nTechnician is now" + getModifyingTechnician();
+            }
+            else
+            {
+                return "The technician was" + oldValue + "." + 
+                "New technician is" + this.getModifyingTechnician();
+            }
     }
 
     /* Override methods */
