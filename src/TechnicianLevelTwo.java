@@ -2,7 +2,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     
     //Attributes
     private final int TICKET_QUOTA = 20;
-    private Ticket currentTicketList[] = new Ticket[TICKET_QUOTA] ;
+    private String currentTicketList[] = new String[TICKET_QUOTA] ;
     private int numberOfTicketsCurrentlyAssigned = 0;
     private final int TECHNICIAN_LEVEL = 2;
     private String userName = "";
@@ -30,40 +30,40 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     }
 
     @Override
-    public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
+    public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity) {
         // TODO changeTicketSeverity needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
         //Check if severity is already set to the new severity level.
-        if(ticket.getSeverity().equals(newSeverity)){
+        if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(newSeverity)){
             return failMsg + newSeverity;
         }
         //...else change the severity
         else{
-            ticket.setSeverity(newSeverity);
+            ITServiceDesk.findTicket(ticketID).setSeverity(newSeverity);
             //if it gets set to LOW or HIGH, then store in the Service desk tempTicket array.
-            if(ticket.getSeverity().equals(TicketSeverity.Low) || ticket.getSeverity().equals(TicketSeverity.Medium)){
-                ITServiceDesk.tempTickets[0] = ticket;
+            if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.Low) || ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.Medium)){
+                ITServiceDesk.tempTickets[0] = ITServiceDesk.findTicket(ticketID);
                 //Show that its actually in the list.
                 System.out.println(ITServiceDesk.tempTickets[0]);
                 //Remove ticket from currentList.
-                removeTicketfromList(ticket);
+                removeTicketfromList(ticketID);
             }
             return successMsg + newSeverity;
         }
     }
 
-    private String removeTicketfromList(Ticket ticket) {
+    public String removeTicketfromList(String ticketID) {
         //TODO remove ticket function needs testing.
         String successMsg = " removed from this technicians list.";
         String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
 
         //Find the ticket and remove from list
         for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
-            if(currentTicketList[i].getId() == ticket.getId()){
+            if(currentTicketList[i] == ticketID){
                 currentTicketList[i].equals(null);
-                return ticket.getId() + successMsg;
+                return ticketID + successMsg;
             }
         }
         //if it cannot be found, send a failure message.
@@ -71,15 +71,15 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     }
 
     @Override
-    public String addTicket(Ticket ticket) {
+    public String addTicket(String ticketID) {
         //TODO addTicket function needs testing.
         String successMsg = " was successfully added.";
         String failMsg = "Ticket was unable to be added. Try again";
 
-        if(ticket != null){
-            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticket;
+        if(ticketID != null){
+            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticketID;
             modifyTicketCount(1);
-            return ticket.getId() + successMsg;
+            return ticketID + successMsg;
         }
         else{
            return failMsg;
@@ -142,7 +142,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     }
 
     @Override
-    public Ticket[] getCurrentTicketList() {
+    public String[] getCurrentTicketList() {
         return this.currentTicketList;
     }
 
@@ -175,19 +175,13 @@ public class TechnicianLevelTwo implements TechnicianInterface{
         else{
             System.out.println("--Current Tickets--");
             for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
-                System.out.println("Ticket Id: " + currentTicketList[i].TicketID);
-                System.out.println("Ticket Author: " + currentTicketList[i].TicketAuthor);
-                System.out.println("Author Email: " + currentTicketList[i].AuthorEmail);
-                System.out.println("Ticket Description: " + currentTicketList[i].Description);
-                System.out.println("Ticket Severity: " + currentTicketList[i].Severity.toString());
-                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString());
+                System.out.println("Ticket Id: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketID);
+                System.out.println("Ticket Author: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketAuthor);
+                System.out.println("Author Email: " + ITServiceDesk.findTicket(currentTicketList[i]).AuthorEmail);
+                System.out.println("Ticket Description: " + ITServiceDesk.findTicket(currentTicketList[i]).Description);
+                System.out.println("Ticket Severity: " + ITServiceDesk.findTicket(currentTicketList[i]).Severity.toString());
+                System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList[i]).Status.toString());
             }
         }
     }
-
-    // @Override
-    // public String archiveTicket(Ticket ticket) {
-    //     
-    //     return null;
-    // }
 }

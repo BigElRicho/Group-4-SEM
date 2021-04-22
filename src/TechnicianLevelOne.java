@@ -1,10 +1,8 @@
-import jdk.jfr.Description;
-
 public class TechnicianLevelOne implements TechnicianInterface{
 
     //Attributes
     private final int TICKET_QUOTA = 20;
-    private Ticket currentTicketList[] = new Ticket[TICKET_QUOTA] ;
+    private String currentTicketList[] = new String[TICKET_QUOTA];
     private int numberOfTicketsCurrentlyAssigned = 0;
     private final int TECHNICIAN_LEVEL = 1;
     private String userName = "";
@@ -32,26 +30,27 @@ public class TechnicianLevelOne implements TechnicianInterface{
     
 
     @Override
-    @Description("Changes the issue from level 1 to level 2.")
-    public String changeTicketSeverity(Ticket ticket, TicketSeverity newSeverity) {
+    public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity) {
         // TODO changeTicketSeverity needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
         //Check if severity is already set to the new severity level.
-        if(ticket.getSeverity().equals(newSeverity)){
+        //TODO - Find the ticket by ticketID, use findTicket()
+        if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(newSeverity)){
             return failMsg + newSeverity;
         }
         //...else change the severity
         else{
-            ticket.setSeverity(newSeverity);
+            ITServiceDesk.findTicket(ticketID).setSeverity(newSeverity);
             //if it gets set to HIGH, then store in the Service desk tempTicket array.
-            if(ticket.getSeverity().equals(TicketSeverity.High)){
-                ITServiceDesk.tempTickets[0] = ticket;
+            if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.High)){
+                ITServiceDesk.tempTickets[0] = ITServiceDesk.findTicket(ticketID);
                 //Show that its actually in the list.
                 System.out.println(ITServiceDesk.tempTickets[0]);
                 //Remove ticket from currentList.
-                removeTicketfromList(ticket);
+                //TODO - removeTicketFromList in technician classes needs to be changed to accept String ticketID rather than ticket object.
+                removeTicketfromList(ticketID);
             }
             return successMsg + newSeverity;
         }
@@ -126,39 +125,38 @@ public class TechnicianLevelOne implements TechnicianInterface{
     }
 
     @Override
-    public Ticket[] getCurrentTicketList() {
+    public String[] getCurrentTicketList() {
         return currentTicketList;
     }
 
     public void displayCurrentTickets(){
-        //TODO displayCurrentTickets() needs testing.
         if(this.getCurrentTicketList()[0] == null){
             System.out.println("No tickets currently assigned.");
         }
         else{
             System.out.println("--Current Tickets--");
             for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
-                System.out.println("Ticket Id: " + currentTicketList[i].TicketID);
-                System.out.println("Ticket Author: " + currentTicketList[i].TicketAuthor);
-                System.out.println("Author Email: " + currentTicketList[i].AuthorEmail);
-                System.out.println("Ticket Description: " + currentTicketList[i].Description);
-                System.out.println("Ticket Severity: " + currentTicketList[i].Severity.toString());
-                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString() + "\n");
+                System.out.println("Ticket Id: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketID);//change to ITServiceDesk.findTicket(ticketID)
+                System.out.println("Ticket Author: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketAuthor);
+                System.out.println("Author Email: " + ITServiceDesk.findTicket(currentTicketList[i]).AuthorEmail);
+                System.out.println("Ticket Description: " + ITServiceDesk.findTicket(currentTicketList[i]).Description);
+                System.out.println("Ticket Severity: " + ITServiceDesk.findTicket(currentTicketList[i]).Severity.toString());
+                System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList[i]).Status.toString() + "\n");
             }
         }
     }
 
-    private String removeTicketfromList(Ticket ticket){
+    public String removeTicketfromList(String ticketID){
 
         String successMsg = " removed from this technicians list.";
         String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
 
         //Find the ticket and remove from list
         for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
-            if(currentTicketList[i].getId() == ticket.getId()){
+            if(currentTicketList[i] == ticketID){
                 currentTicketList[i].equals(null);
                 modifyTicketCount(-1);
-                return ticket.getId() + successMsg;
+                return ticketID + successMsg;
             }
         }
         //if it cannot be found, send a failure message.
@@ -166,14 +164,14 @@ public class TechnicianLevelOne implements TechnicianInterface{
     }
 
     @Override
-    public String addTicket(Ticket ticket) {
+    public String addTicket(String ticketID) {
         String successMsg = " was successfully added.";
         String failMsg = "Ticket was unable to be added. Try again";
 
-        if(ticket != null){
-            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticket;
+        if(ticketID != null){
+            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticketID;
             modifyTicketCount(1);
-            return ticket.getId() + successMsg;
+            return ticketID + successMsg;
         }
         else{
            return failMsg;
@@ -195,9 +193,4 @@ public class TechnicianLevelOne implements TechnicianInterface{
         else return "Ticket count cannot be made negative.";
     }
 
-    // @Override
-    // public String archiveTicket(Ticket ticket) {
-    //     
-    //     return null;
-    // }
 }

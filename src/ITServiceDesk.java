@@ -147,7 +147,6 @@ class ITServiceDesk{
                     loggedIn = false;
                 }
                 if(menuChoice == 2){
-                    //TODO - Test show tickets.
                     //Find technician with userName that matches account name
                     //then call displapCurrentTickets on that technician.
                     technicianAccounts[ValidateCurrentUserTechnician()].displayCurrentTickets();
@@ -502,6 +501,35 @@ class ITServiceDesk{
         }
     }
 
+    public static void setupTestTickets(){
+        String setupMsg = "Test tickets have been created";
+
+        //Create a few tickets
+        Ticket ticket1 = new Ticket("1", "test1@test.com","Tester 1", "Test 1");
+        Ticket ticket2 = new Ticket("2", "test2@test.com","Tester 2", "Test 2" );
+        Ticket ticket3 = new Ticket("3", "test1@test.com","Tester 1", "Test 3");
+        Ticket ticket4 = new Ticket("4", "test2@test.com","Tester 2", "Test 4");
+        Ticket ticket5 = new Ticket("5", "test1@test.com","Tester 1", "Test 5");
+        Ticket ticket6 = new Ticket("6", "test2@test.com","Tester 2", "Test 6");
+        Ticket ticket7 = new Ticket("7", "test1@test.com","Tester 1", "Test 7");
+        Ticket ticket8 = new Ticket("8", "test2@test.com","Tester 2", "Test 8");
+        Ticket ticket9 = new Ticket("9", "test1@test.com","Tester 1", "Test 9");
+        Ticket ticket10 = new Ticket("10", "test2@test.com","Tester 2", "Test 10");
+
+        ticket[0] = ticket1;
+        ticket[1] = ticket2;
+        ticket[2] = ticket3;
+        ticket[3] = ticket4;
+        ticket[4] = ticket5;
+        ticket[5] = ticket6;
+        ticket[6] = ticket7;
+        ticket[7] = ticket8;
+        ticket[8] = ticket9;
+        ticket[9] = ticket10;
+
+       System.out.println(setupMsg);
+    }
+
         //Method used for checking the tempTicket array. If there is a ticket found
     //It will atempt to assign it based on severity and technician with the lowest ticket count
     private static void ReAssignTicket()
@@ -553,7 +581,7 @@ class ITServiceDesk{
         }
         
         //Insert the new ticket -> Consider making this a method in the technician to avoid errors
-        technicianAccounts[TechnicianIndex].getCurrentTicketList()[LowestTicketCount] = ticket;
+        technicianAccounts[TechnicianIndex].getCurrentTicketList()[LowestTicketCount] = ticket.TicketID;
     }
 
     //Validate Technician is Currently loged in
@@ -588,11 +616,11 @@ class ITServiceDesk{
             System.out.println(String.format("You currently have %d tickets assigned to you\n", technicianAccounts[TechnicianIndex].getNumberOfTicketsCurrentlyAssigned()));
             
             //Print technicians ticket list
-            for(Ticket t : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+            for(String s : technicianAccounts[TechnicianIndex].getCurrentTicketList())
             {
-                if(t != null) //Because we can have null objects
+                if(s != null) //Because we can have null objects
                 {
-                    System.out.println(t);
+                    System.out.println(s);
                 }
             }
 
@@ -600,9 +628,10 @@ class ITServiceDesk{
 
                 String TicketID = input.nextLine();
 
-                for(Ticket ticket : technicianAccounts[TechnicianIndex].getCurrentTicketList())
+                for(String ticket : technicianAccounts[TechnicianIndex].getCurrentTicketList())
                 {
-                    if(Objects.nonNull(ticket) && ticket.getId().equals(TicketID)) // Avoid null objects
+                    //TODO: This will need retweaking to work with the new technician currentTicketList[] type.
+                    if(Objects.nonNull(ticket) && ticket == TicketID) // Avoid null objects
                     {
                         System.out.println("What severity level would you like to escalte this ticket to?\n1. Low\n2. Medium\n3. High");
                         
@@ -635,35 +664,6 @@ class ITServiceDesk{
         {
             System.out.println("This feature is only available for technicians.\n");
         }
-    }
-
-    public static void setupTestTickets(){
-        String setupMsg = "Test tickets have been created";
-
-        //Create a few tickets
-        Ticket ticket1 = new Ticket("1", "test1@test.com","Tester 1", "Test 1");
-        Ticket ticket2 = new Ticket("2", "test2@test.com","Tester 2", "Test 2" );
-        Ticket ticket3 = new Ticket("3", "test1@test.com","Tester 1", "Test 3");
-        Ticket ticket4 = new Ticket("4", "test2@test.com","Tester 2", "Test 4");
-        Ticket ticket5 = new Ticket("5", "test1@test.com","Tester 1", "Test 5");
-        Ticket ticket6 = new Ticket("6", "test2@test.com","Tester 2", "Test 6");
-        Ticket ticket7 = new Ticket("7", "test1@test.com","Tester 1", "Test 7");
-        Ticket ticket8 = new Ticket("8", "test2@test.com","Tester 2", "Test 8");
-        Ticket ticket9 = new Ticket("9", "test1@test.com","Tester 1", "Test 9");
-        Ticket ticket10 = new Ticket("10", "test2@test.com","Tester 2", "Test 10");
-
-        ticket[0] = ticket1;
-        ticket[1] = ticket2;
-        ticket[2] = ticket3;
-        ticket[3] = ticket4;
-        ticket[4] = ticket5;
-        ticket[5] = ticket6;
-        ticket[6] = ticket7;
-        ticket[7] = ticket8;
-        ticket[8] = ticket9;
-        ticket[9] = ticket10;
-
-       System.out.println(setupMsg);
     }
 
     public static String setupTestStaffAccounts(){
@@ -742,5 +742,15 @@ class ITServiceDesk{
 
        
 
+    }
+
+    public static Ticket findTicket(String ticketID){
+        for(int i=0;i<ticketCount;i++){
+            if(ticket[i].getId() == ticketID){
+                return ticket[i];
+            }
+        }
+        //If nothing is found...
+        return null;
     }
 }
