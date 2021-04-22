@@ -487,13 +487,13 @@ class ITServiceDesk{
         technicianAccounts[3] = louisTomlinson;
         technicianAccounts[4] = zayneMalick;
 
-        // technicianAccounts[0].getCurrentTicketList()[0] = ticket[0];
-        // technicianAccounts[0].modifyTicketCount(1);
-        // //System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[0].TicketID);
-        // technicianAccounts[0].getCurrentTicketList()[1] = ticket[1];
-        // technicianAccounts[0].modifyTicketCount(1);
+        technicianAccounts[0].getCurrentTicketList()[0] = ticket[0].TicketID;
+        technicianAccounts[0].modifyTicketCount(1);
+        System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[0]);
+        technicianAccounts[0].getCurrentTicketList()[1] = ticket[1].TicketID;
+        technicianAccounts[0].modifyTicketCount(1);
 
-        // System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[1].TicketID);
+        System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[1]);
 
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
@@ -526,6 +526,8 @@ class ITServiceDesk{
         ticket[7] = ticket8;
         ticket[8] = ticket9;
         ticket[9] = ticket10;
+
+        ticketCount = 10;
 
        System.out.println(setupMsg);
     }
@@ -626,28 +628,25 @@ class ITServiceDesk{
 
                 System.out.println("Enter the ticket ID of the ticket you wish to escalate: ");
 
-                String TicketID = input.nextLine();
-
-                for(String ticket : technicianAccounts[TechnicianIndex].getCurrentTicketList())
-                {
-                    //TODO: This will need retweaking to work with the new technician currentTicketList[] type.
-                    if(Objects.nonNull(ticket) && ticket == TicketID) // Avoid null objects
+                String ticketIDInput = input.nextLine();
+                    //TODO - unfinished change severity()
+                    if(ITServiceDesk.findTicket(ticketIDInput) != null) // Avoid null objects
                     {
                         System.out.println("What severity level would you like to escalte this ticket to?\n1. Low\n2. Medium\n3. High");
                         
-                        int newLevel = input.nextInt();
+                        String newLevel = input.nextLine();
 
                         //Change severity based on the input 1 -> 3
                         switch(newLevel)
                         {
-                            case 1: 
-                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Low);
+                            case "1": 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticketIDInput, TicketSeverity.Low);
                                 break;
-                            case 2: 
-                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.Medium);
+                            case "2": 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticketIDInput, TicketSeverity.Medium);
                                 break;
-                            case 3: 
-                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticket, TicketSeverity.High);
+                            case "3": 
+                                technicianAccounts[TechnicianIndex].changeTicketSeverity(ticketIDInput, TicketSeverity.High);
                                 break;
                             default: 
                                 System.out.println("Error. Be sure to enter a number 1-3\n");
@@ -655,7 +654,7 @@ class ITServiceDesk{
 
                         //Check to see if the ticket needs to be reassigned
                         ReAssignTicket();
-                    }
+                    // }
                 }
 
                 System.out.println("Invalid Ticket ID, please try again\n");
@@ -745,12 +744,14 @@ class ITServiceDesk{
     }
 
     public static Ticket findTicket(String ticketID){
-        for(int i=0;i<ticketCount;i++){
-            if(ticket[i].getId() == ticketID){
+        for(int i = 0; i<ticketCount;i++){
+            System.out.println("find ticket attempt: " + i);
+            if(ticket[i].getId().equals(ticketID)){
                 return ticket[i];
             }
         }
         //If nothing is found...
+        System.out.println("No ticket found matching: " + ticketID + "\n");
         return null;
     }
 }
