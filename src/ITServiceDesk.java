@@ -22,8 +22,8 @@ class ITServiceDesk{
     static Ticket[] tempTickets = new Ticket[1];
 
     public static void main (String[] args){
-        setupTechnicians();
         setupTestTickets();
+        setupTechnicians();
         welcomeMenu();
     }
     
@@ -147,8 +147,11 @@ class ITServiceDesk{
                     loggedIn = false;
                 }
                 if(menuChoice == 2){
-                    //viewAssignedTickets
-                    System.out.println("This feature is coming soon");
+                    //TODO - Test show tickets.
+                    //Find technician with userName that matches account name
+                    //then call displapCurrentTickets on that technician.
+                    technicianAccounts[ValidateCurrentUserTechnician()].displayCurrentTickets();
+                    // System.out.println("This feature is coming soon");
                 }
                 if(menuChoice == 3){
                     ChangeTicketSeverity();
@@ -485,8 +488,13 @@ class ITServiceDesk{
         technicianAccounts[3] = louisTomlinson;
         technicianAccounts[4] = zayneMalick;
 
-        technicianAccounts[0].getCurrentTicketList()[0] = ticket[0];
-        technicianAccounts[0].getCurrentTicketList()[1] = ticket[1];
+        // technicianAccounts[0].getCurrentTicketList()[0] = ticket[0];
+        // technicianAccounts[0].modifyTicketCount(1);
+        // //System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[0].TicketID);
+        // technicianAccounts[0].getCurrentTicketList()[1] = ticket[1];
+        // technicianAccounts[0].modifyTicketCount(1);
+
+        // System.out.println("Harry.Styles ticket number: " + technicianAccounts[0].getCurrentTicketList()[1].TicketID);
 
         //Print out user names to confirm presence.
         for(int i = 0; i<technicianAccountCount;i++){
@@ -629,8 +637,8 @@ class ITServiceDesk{
         }
     }
 
-    public static String setupTestTickets(){
-        String setupMsg = "Test tickets have been created:";
+    public static void setupTestTickets(){
+        String setupMsg = "Test tickets have been created";
 
         //Create a few tickets
         Ticket ticket1 = new Ticket("1", "test1@test.com","Tester 1", "Test 1");
@@ -655,7 +663,7 @@ class ITServiceDesk{
         ticket[8] = ticket9;
         ticket[9] = ticket10;
 
-        return setupMsg;
+       System.out.println(setupMsg);
     }
 
     public static String setupTestStaffAccounts(){

@@ -132,7 +132,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     public void displayCurrentTickets(){
         //TODO displayCurrentTickets() needs testing.
-        if(numberOfTicketsCurrentlyAssigned == 0){
+        if(this.getCurrentTicketList()[0] == null){
             System.out.println("No tickets currently assigned.");
         }
         else{
@@ -143,7 +143,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
                 System.out.println("Author Email: " + currentTicketList[i].AuthorEmail);
                 System.out.println("Ticket Description: " + currentTicketList[i].Description);
                 System.out.println("Ticket Severity: " + currentTicketList[i].Severity.toString());
-                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString());
+                System.out.println("Ticket Status: " + currentTicketList[i].Status.toString() + "\n");
             }
         }
     }
