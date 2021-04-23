@@ -1,8 +1,10 @@
+import java.util.ArrayList;
+
 public class TechnicianLevelTwo implements TechnicianInterface{
     
     //Attributes
-    private final int TICKET_QUOTA = 20;
-    private String currentTicketList[] = new String[TICKET_QUOTA] ;
+    //private final int TICKET_QUOTA = 20;
+    private ArrayList<String> currentTicketList = new ArrayList<String>();
     private int numberOfTicketsCurrentlyAssigned = 0;
     private final int TECHNICIAN_LEVEL = 2;
     private String userName = "";
@@ -31,7 +33,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
 
     @Override
     public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity) {
-        // TODO changeTicketSeverity needs testing.
+        // TODO changeTicketSeverity for T2 needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
@@ -43,11 +45,11 @@ public class TechnicianLevelTwo implements TechnicianInterface{
         else{
             ITServiceDesk.findTicket(ticketID).setSeverity(newSeverity);
             //if it gets set to LOW or HIGH, then store in the Service desk tempTicket array.
-            if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.Low) || ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.Medium)){
-                ITServiceDesk.tempTickets[0] = ITServiceDesk.findTicket(ticketID);
-                //Show that its actually in the list.
-                System.out.println(ITServiceDesk.tempTickets[0]);
+            if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.Low) || 
+            ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.Medium))
+            {
                 //Remove ticket from currentList.
+                ITServiceDesk.findTicket(ticketID).setModifyingTechnician(this.getUsername());
                 removeTicketfromList(ticketID);
             }
             return successMsg + newSeverity;
@@ -55,14 +57,14 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     }
 
     public String removeTicketfromList(String ticketID) {
-        //TODO remove ticket function needs testing.
+        //TODO - (DO THIS FIRST) remove ticket function needs testing.
         String successMsg = " removed from this technicians list.";
         String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
 
         //Find the ticket and remove from list
         for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
-            if(currentTicketList[i] == ticketID){
-                currentTicketList[i].equals(null);
+            if(currentTicketList.get(i).equals(ticketID)){
+                currentTicketList.remove(i);
                 return ticketID + successMsg;
             }
         }
@@ -77,7 +79,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
         String failMsg = "Ticket was unable to be added. Try again";
 
         if(ticketID != null){
-            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticketID;
+            currentTicketList.add(ticketID);
             modifyTicketCount(1);
             return ticketID + successMsg;
         }
@@ -142,7 +144,7 @@ public class TechnicianLevelTwo implements TechnicianInterface{
     }
 
     @Override
-    public String[] getCurrentTicketList() {
+    public ArrayList<String> getCurrentTicketList() {
         return this.currentTicketList;
     }
 
@@ -175,12 +177,13 @@ public class TechnicianLevelTwo implements TechnicianInterface{
         else{
             System.out.println("--Current Tickets--");
             for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
-                System.out.println("Ticket Id: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketID);
-                System.out.println("Ticket Author: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketAuthor);
-                System.out.println("Author Email: " + ITServiceDesk.findTicket(currentTicketList[i]).AuthorEmail);
-                System.out.println("Ticket Description: " + ITServiceDesk.findTicket(currentTicketList[i]).Description);
-                System.out.println("Ticket Severity: " + ITServiceDesk.findTicket(currentTicketList[i]).Severity.toString());
-                System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList[i]).Status.toString());
+                System.out.println("Ticket Id: " + ITServiceDesk.findTicket(currentTicketList.get(i)).TicketID);
+                System.out.println("Ticket Author: " + ITServiceDesk.findTicket(currentTicketList.get(i)).TicketAuthor);
+                System.out.println("Author Email: " + ITServiceDesk.findTicket(currentTicketList.get(i)).AuthorEmail);
+                System.out.println("Ticket Description: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Description);
+                System.out.println("Ticket Severity: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Severity.toString());
+                System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Status.toString());
+                System.out.println("Modifying technician: " + ITServiceDesk.findTicket(currentTicketList.get(i)).getModifyingTechnician() + "\n");
             }
         }
     }

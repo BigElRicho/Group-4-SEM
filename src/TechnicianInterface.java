@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public interface TechnicianInterface{
 
     public int technicianLevel = 0;
@@ -6,7 +8,7 @@ public interface TechnicianInterface{
 
     public int getNumberOfTicketsCurrentlyAssigned();
 
-    public String[] getCurrentTicketList();
+    public ArrayList<String> getCurrentTicketList();
 
     public String addTicket(String ticketID);
 
