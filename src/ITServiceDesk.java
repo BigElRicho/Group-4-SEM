@@ -24,6 +24,7 @@ class ITServiceDesk{
     public static void main (String[] args){
         setupTestTickets();
         setupTechnicians();
+        setupTestStaffAccounts();
         welcomeMenu();
     }
     
@@ -720,7 +721,6 @@ class ITServiceDesk{
 
             return true;
         }
-
         return false;
     }
 
@@ -749,9 +749,6 @@ class ITServiceDesk{
         {
             System.out.println(String.format("Error thrown %s", exc));
         }
-
-       
-
     }
 
     public static Ticket findTicket(String ticketID){
@@ -764,5 +761,18 @@ class ITServiceDesk{
         //If nothing is found...
         System.out.println("No ticket found matching: " + ticketID + "\n");
         return null;
+    }
+
+    public static ArrayList<String> getClosedTickets(){
+        ArrayList<String> closedTickets = new ArrayList<String>();
+        int ticketsClosedCount = 0;
+        for(int i=0;i<ticketCount;i++){
+            if(ticket[i].getStatus().equals(TicketStatus.ClosedResolved)||
+               ticket[i].getStatus().equals(TicketStatus.ClosedUnresolved)){
+                closedTickets.add(ticket[i].getId());
+            }
+        }
+        System.out.println("Closed tickets found: " + ticketsClosedCount);
+        return closedTickets;
     }
 }

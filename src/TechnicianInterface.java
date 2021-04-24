@@ -26,15 +26,17 @@ public interface TechnicianInterface{
 
     public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity);
 
-    public String closeTicketWithoutResolution(Ticket ticket);
+    public String closeTicketWithoutResolution(String ticketID);
 
-    public String closeAndResolveTicket(Ticket ticket);
+    public String closeAndResolveTicket(String ticketID);
 
-    // public String archiveTicket(Ticket ticket);
+    public String reopenTicket(String ticketID);
 
     public String changeUsername(String newUsername);
 
     public String changePassword(String newPassword);
 
     public void displayCurrentTickets();
+
+    public void displayClosedTickets();
 }

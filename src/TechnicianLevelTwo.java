@@ -90,19 +90,70 @@ public class TechnicianLevelTwo implements TechnicianInterface{
 
     // TODO closeTicketWithoutResolution function needs testing.
     @Override
-    public String closeTicketWithoutResolution(Ticket ticket) {
-        String successMsg = " has been closed without a resolution.";
-
-        ticket.setStatus(TicketStatus.ClosedUnresolved);
-         return ticket.getId() + successMsg;
+    public String closeTicketWithoutResolution(String ticketID) {
+        // TODO closeTicketWithoutResolution is implemented and needs testing.
+        String successMsg = " was successfully closed without a resolution.";
+        String failMsg = "Something went wrong while trying to close the ticket.";
+        String alreadyClosedMsg = " is already closed.";
+        if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
+           ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved))
+           {
+            return "TicketID: " + ticketID + alreadyClosedMsg;
+        }
+        else{
+            ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedUnresolved);
+            //Check that the status was changed...
+            if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved))
+            {
+                return "TicketID: " + ticketID + successMsg;
+            }
+            else{
+                return failMsg;
+            }
+        }
     }
 
     @Override
-    public String closeAndResolveTicket(Ticket ticket) {
-        // TODO closeAndResolveTicket needs testing.
-        String successMsg = " was successfully closed without a resolution.";
-        ticket.setStatus(TicketStatus.ClosedResolved);
-        return ticket.getId() + successMsg;
+    public String closeAndResolveTicket(String ticketID) {
+        // TODO closeAndResolveTicket is implemented and needs testing.
+        String successMsg = " was successfully closed with a resolution.";
+        String failMsg = "Something went wrong while trying to close the ticket.";
+        String alreadyClosedMsg = " is already closed.";
+        if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
+           ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+                return "TicketID: " + ticketID + alreadyClosedMsg;
+           }
+           else{
+            ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedResolved);
+            if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+                return ticketID + successMsg;
+            }
+            else{
+                return failMsg;
+            }   
+        }    
+    }
+
+
+    @Override
+    public String reopenTicket(String ticketID) {
+    // TODO reopenTicket() is implemented and needs testing.
+        String successMsg = " was successfully reopened.";
+        String failMsg = "Something went wrong while trying to reopen the ticket.";
+        String alreadyOpenMsg = " is already open";
+        if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open))
+        {
+            return "TicketID: " + ticketID + alreadyOpenMsg;
+        }
+        else{
+            ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.Open);
+            if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open)){
+                return ticketID + successMsg;
+            }
+            else{
+                return failMsg;
+            }   
+        }  
     }
 
     @Override
@@ -185,6 +236,35 @@ public class TechnicianLevelTwo implements TechnicianInterface{
                 System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Status.toString());
                 System.out.println("Modifying technician: " + ITServiceDesk.findTicket(currentTicketList.get(i)).getModifyingTechnician() + "\n");
             }
+        }
+    }
+
+    @Override
+    public void displayClosedTickets() {
+         // TODO - testing needed for displayClosedTickets()
+        System.out.println("--Tickets Currently Closed--");
+        if(ITServiceDesk.getClosedTickets().size() > 0 ){
+            ArrayList<String> closedTicketList = new ArrayList<String>();
+            for(int i=0;i<closedTicketList.size();i++)
+            {
+                System.out.println("Ticket Id: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).TicketID);
+                System.out.println("Ticket Author: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).TicketAuthor);
+                System.out.println("Author Email: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).AuthorEmail);
+                System.out.println("Ticket Description: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).Description);
+                System.out.println("Ticket Severity: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).Severity.toString());
+                System.out.println("Ticket Status: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).Status.toString());
+                System.out.println("Modifying Technician: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).getModifyingTechnician() + "\n");
+            }
+        }
+        else{
+            System.out.println("There are currently no closed tickets.");
         }
     }
 }
