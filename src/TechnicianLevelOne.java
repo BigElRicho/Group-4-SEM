@@ -72,67 +72,71 @@ public class TechnicianLevelOne implements TechnicianInterface{
     @Override
     public String closeTicketWithoutResolution(String ticketID) {
         // TODO closeTicketWithoutResolution is implemented and needs testing.
-        String successMsg = " was successfully closed without a resolution.";
-        String failMsg = "Something went wrong while trying to close the ticket.";
-        String alreadyClosedMsg = " is already closed.";
-        if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
-           ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved))
-           {
-            return "TicketID: " + ticketID + alreadyClosedMsg;
-        }
-        else{
-            ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedUnresolved);
-            //Check that the status was changed...
-            if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved))
-            {
-                return "TicketID: " + ticketID + successMsg;
-            }
-            else{
-                return failMsg;
-            }
-        }
+        // String successMsg = " was successfully closed without a resolution.";
+        // String failMsg = "Something went wrong while trying to close the ticket.";
+        // String alreadyClosedMsg = " is already closed.";
+        // if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
+        //    ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved))
+        //    {
+        //     return "TicketID: " + ticketID + alreadyClosedMsg;
+        // }
+        // else{
+        //     ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedUnresolved);
+        //     //Check that the status was changed...
+        //     if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved))
+        //     {
+        //         return "TicketID: " + ticketID + successMsg;
+        //     }
+        //     else{
+        //         return failMsg;
+        //     }
+        // }
+        return ITServiceDesk.closeTicketWithoutResolution(ticketID);
     }
 
     @Override
     public String closeAndResolveTicket(String ticketID) {
         // TODO closeAndResolveTicket is implemented and needs testing.
-        String successMsg = " was successfully closed with a resolution.";
-        String failMsg = "Something went wrong while trying to close the ticket.";
-        String alreadyClosedMsg = " is already closed.";
-        if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
-           ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
-                return "TicketID: " + ticketID + alreadyClosedMsg;
-           }
-           else{
-            ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedResolved);
-            if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
-                return ticketID + successMsg;
-            }
-            else{
-                return failMsg;
-            }   
-        }    
+        // String successMsg = " was successfully closed with a resolution.";
+        // String failMsg = "Something went wrong while trying to close the ticket.";
+        // String alreadyClosedMsg = " is already closed.";
+        // if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
+        //    ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+        //         return "TicketID: " + ticketID + alreadyClosedMsg;
+        //    }
+        //    else{
+        //     ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedResolved);
+        //     if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+        //         return ticketID + successMsg;
+        //     }
+        //     else{
+        //         return failMsg;
+        //     }   
+        // }    
+        return ITServiceDesk.closeTicketWithResolution(ticketID);
     }
 
     @Override
     public String reopenTicket(String ticketID) {
         // TODO reopenTicket() is implemented and needs testing.
-        String successMsg = " was successfully reopened.";
-        String failMsg = "Something went wrong while trying to reopen the ticket.";
-        String alreadyOpenMsg = " is already open";
-        if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open))
-        {
-            return "TicketID: " + ticketID + alreadyOpenMsg;
-        }
-        else{
-            ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.Open);
-            if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open)){
-                return ticketID + successMsg;
-            }
-            else{
-                return failMsg;
-            }   
-        }  
+        // String successMsg = " was successfully reopened.";
+        // String failMsg = "Something went wrong while trying to reopen the ticket.";
+        // String alreadyOpenMsg = " is already open";
+        // if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open))
+        // {
+        //     return "TicketID: " + ticketID + alreadyOpenMsg;
+        // }
+        // else{
+        //     ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.Open);
+        //     if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open)){
+        //         return ticketID + successMsg;
+        //     }
+        //     else{
+        //         return failMsg;
+        //     }   
+        // }  
+        
+        return ITServiceDesk.reopenTicket(ticketID);
     }
 
     @Override

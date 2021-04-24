@@ -10,7 +10,7 @@ public class Ticket
     Boolean Archived = false;
     CustomDateTime OpenDate;
     CustomDateTime ClosedDate = null;
-    private String ModifyingTechnician = "";
+    private String ModifyingTechnician = "n/a";
 
     /* Constructors */
 
