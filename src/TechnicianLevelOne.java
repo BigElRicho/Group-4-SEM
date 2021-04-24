@@ -1,8 +1,10 @@
+import java.util.ArrayList;
+
 public class TechnicianLevelOne implements TechnicianInterface{
 
     //Attributes
-    private final int TICKET_QUOTA = 20;
-    private String currentTicketList[] = new String[TICKET_QUOTA];
+    //private final int TICKET_QUOTA = 20;
+    private ArrayList<String> currentTicketList = new ArrayList<String>();
     private int numberOfTicketsCurrentlyAssigned = 0;
     private final int TECHNICIAN_LEVEL = 1;
     private String userName = "";
@@ -28,15 +30,12 @@ public class TechnicianLevelOne implements TechnicianInterface{
         return this.lastName;
     }
     
-    //TODO - Start here tomorrow. This method is unable to locate the ticket from changeSeverity in ISD.
     @Override
     public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity) {
-        // TODO changeTicketSeverity needs testing.
         String successMsg = "Ticket successfully changed to: ";
         String failMsg = "Issue unable to be changed as it is already set to: ";
         
         //Check if severity is already set to the new severity level.
-        //TODO - Find the ticket by ticketID, use findTicket()
         if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(newSeverity)){
             return failMsg + newSeverity;
         }
@@ -44,33 +43,100 @@ public class TechnicianLevelOne implements TechnicianInterface{
         else{
             ITServiceDesk.findTicket(ticketID).setSeverity(newSeverity);
             //if it gets set to HIGH, then store in the Service desk tempTicket array.
-            if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.High)){
-                ITServiceDesk.tempTickets[0] = ITServiceDesk.findTicket(ticketID);
-                //Show that its actually in the list.
-                System.out.println(ITServiceDesk.tempTickets[0]);
-                //Remove ticket from currentList.
-                //TODO - removeTicketFromList in technician classes needs to be changed to accept String ticketID rather than ticket object.
+            if(ITServiceDesk.findTicket(ticketID).getSeverity().equals(TicketSeverity.High))
+            {
+                ITServiceDesk.findTicket(ticketID).setModifyingTechnician(this.getUsername());
                 removeTicketfromList(ticketID);
             }
             return successMsg + newSeverity;
         }
     }
 
-    @Override
-    public String closeTicketWithoutResolution(Ticket ticket) {
-        // TODO closeTicketWithoutResolution needs testing.
-        String successMsg = " was successfully closed without a resolution.";
-        //String failMsg = "Something went wrong while trying to close the ticket.";
-            ticket.setStatus(TicketStatus.ClosedUnresolved);
-            return ticket.getId() + successMsg;
+    public String removeTicketfromList(String ticketID){
+
+        String successMsg = " removed from this technicians list.";
+        String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
+
+        //Find the ticket and remove from list
+        for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
+            if(currentTicketList.get(i).equals(ticketID)){
+                currentTicketList.remove(i);
+                modifyTicketCount(-1);
+                return ticketID + successMsg;
+            }
+        }
+        //if it cannot be found, send a failure message.
+        return failMsg;
     }
 
     @Override
-    public String closeAndResolveTicket(Ticket ticket) {
-        // TODO closeAndResolveTicket needs testing.
-        String successMsg = " was successfully closed without a resolution.";
-        ticket.setStatus(TicketStatus.ClosedResolved);
-        return ticket.getId() + successMsg;
+    public String closeTicketWithoutResolution(String ticketID) {
+        // TODO closeTicketWithoutResolution is implemented and needs testing.
+        // String successMsg = " was successfully closed without a resolution.";
+        // String failMsg = "Something went wrong while trying to close the ticket.";
+        // String alreadyClosedMsg = " is already closed.";
+        // if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
+        //    ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved))
+        //    {
+        //     return "TicketID: " + ticketID + alreadyClosedMsg;
+        // }
+        // else{
+        //     ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedUnresolved);
+        //     //Check that the status was changed...
+        //     if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved))
+        //     {
+        //         return "TicketID: " + ticketID + successMsg;
+        //     }
+        //     else{
+        //         return failMsg;
+        //     }
+        // }
+        return ITServiceDesk.closeTicketWithoutResolution();
+    }
+
+    @Override
+    public String closeAndResolveTicket(String ticketID) {
+        // TODO closeAndResolveTicket is implemented and needs testing.
+        // String successMsg = " was successfully closed with a resolution.";
+        // String failMsg = "Something went wrong while trying to close the ticket.";
+        // String alreadyClosedMsg = " is already closed.";
+        // if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
+        //    ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+        //         return "TicketID: " + ticketID + alreadyClosedMsg;
+        //    }
+        //    else{
+        //     ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedResolved);
+        //     if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+        //         return ticketID + successMsg;
+        //     }
+        //     else{
+        //         return failMsg;
+        //     }   
+        // }    
+        return ITServiceDesk.closeTicketWithResolution();
+    }
+
+    @Override
+    public String reopenTicket(String ticketID) {
+        // TODO reopenTicket() is implemented and needs testing.
+        // String successMsg = " was successfully reopened.";
+        // String failMsg = "Something went wrong while trying to reopen the ticket.";
+        // String alreadyOpenMsg = " is already open";
+        // if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open))
+        // {
+        //     return "TicketID: " + ticketID + alreadyOpenMsg;
+        // }
+        // else{
+        //     ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.Open);
+        //     if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open)){
+        //         return ticketID + successMsg;
+        //     }
+        //     else{
+        //         return failMsg;
+        //     }   
+        // }  
+        
+        return ITServiceDesk.reopenTicket();
     }
 
     @Override
@@ -125,42 +191,26 @@ public class TechnicianLevelOne implements TechnicianInterface{
     }
 
     @Override
-    public String[] getCurrentTicketList() {
+    public ArrayList<String> getCurrentTicketList() {
         return currentTicketList;
     }
 
     public void displayCurrentTickets(){
-        if(this.getCurrentTicketList()[0] == null){
+        if(this.getCurrentTicketList().get(0) == null){
             System.out.println("No tickets currently assigned.");
         }
         else{
             System.out.println("--Current Tickets--");
             for(int i=0;i<numberOfTicketsCurrentlyAssigned;i++){
-                System.out.println("Ticket Id: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketID);//change to ITServiceDesk.findTicket(ticketID)
-                System.out.println("Ticket Author: " + ITServiceDesk.findTicket(currentTicketList[i]).TicketAuthor);
-                System.out.println("Author Email: " + ITServiceDesk.findTicket(currentTicketList[i]).AuthorEmail);
-                System.out.println("Ticket Description: " + ITServiceDesk.findTicket(currentTicketList[i]).Description);
-                System.out.println("Ticket Severity: " + ITServiceDesk.findTicket(currentTicketList[i]).Severity.toString());
-                System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList[i]).Status.toString() + "\n");
+                System.out.println("Ticket Id: " + ITServiceDesk.findTicket(currentTicketList.get(i)).TicketID);//change to ITServiceDesk.findTicket(ticketID)
+                System.out.println("Ticket Author: " + ITServiceDesk.findTicket(currentTicketList.get(i)).TicketAuthor);
+                System.out.println("Author Email: " + ITServiceDesk.findTicket(currentTicketList.get(i)).AuthorEmail);
+                System.out.println("Ticket Description: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Description);
+                System.out.println("Ticket Severity: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Severity.toString());
+                System.out.println("Ticket Status: " + ITServiceDesk.findTicket(currentTicketList.get(i)).Status.toString());
+                System.out.println("Modifying Technician: " + ITServiceDesk.findTicket(currentTicketList.get(i)).getModifyingTechnician() + "\n");
             }
         }
-    }
-
-    public String removeTicketfromList(String ticketID){
-
-        String successMsg = " removed from this technicians list.";
-        String failMsg = "Ticket was not removed from the technician, as it could not be found or for another reason.";
-
-        //Find the ticket and remove from list
-        for(int i = 0;i < numberOfTicketsCurrentlyAssigned;i++){
-            if(currentTicketList[i] == ticketID){
-                currentTicketList[i].equals(null);
-                modifyTicketCount(-1);
-                return ticketID + successMsg;
-            }
-        }
-        //if it cannot be found, send a failure message.
-        return failMsg;
     }
 
     @Override
@@ -169,7 +219,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
         String failMsg = "Ticket was unable to be added. Try again";
 
         if(ticketID != null){
-            currentTicketList[numberOfTicketsCurrentlyAssigned-1] = ticketID;
+            currentTicketList.add(ticketID);
             modifyTicketCount(1);
             return ticketID + successMsg;
         }
@@ -193,4 +243,31 @@ public class TechnicianLevelOne implements TechnicianInterface{
         else return "Ticket count cannot be made negative.";
     }
 
+    @Override
+    public void displayClosedTickets() {
+        System.out.println("--Tickets Currently Closed--");
+        if(ITServiceDesk.getClosedTickets().size() > 0 ){
+            ArrayList<String> closedTicketList = new ArrayList<String>();
+            for(int i=0;i<closedTicketList.size();i++)
+            {
+                System.out.println("Ticket Id: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).TicketID);
+                System.out.println("Ticket Author: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).TicketAuthor);
+                System.out.println("Author Email: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).AuthorEmail);
+                System.out.println("Ticket Description: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).Description);
+                System.out.println("Ticket Severity: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).Severity.toString());
+                System.out.println("Ticket Status: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).Status.toString());
+                System.out.println("Modifying Technician: " + 
+                ITServiceDesk.findTicket(closedTicketList.get(i)).getModifyingTechnician() + "\n");
+            }
+        }
+        else{
+            System.out.println("There are currently no closed tickets.");
+        }
+    }
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public interface TechnicianInterface{
 
     public int technicianLevel = 0;
@@ -6,7 +8,7 @@ public interface TechnicianInterface{
 
     public int getNumberOfTicketsCurrentlyAssigned();
 
-    public String[] getCurrentTicketList();
+    public ArrayList<String> getCurrentTicketList();
 
     public String addTicket(String ticketID);
 
@@ -24,15 +26,17 @@ public interface TechnicianInterface{
 
     public String changeTicketSeverity(String ticketID, TicketSeverity newSeverity);
 
-    public String closeTicketWithoutResolution(Ticket ticket);
+    public String closeTicketWithoutResolution(String ticketID);
 
-    public String closeAndResolveTicket(Ticket ticket);
+    public String closeAndResolveTicket(String ticketID);
 
-    // public String archiveTicket(Ticket ticket);
+    public String reopenTicket(String ticketID);
 
     public String changeUsername(String newUsername);
 
     public String changePassword(String newPassword);
 
     public void displayCurrentTickets();
+
+    public void displayClosedTickets();
 }
