@@ -99,7 +99,7 @@ public class Ticket
     public boolean setStatus(TicketStatus status) 
     {
         //Check if it is archived
-        if(!getArchived())
+        if(!Archived)//(!getArchived())
         {
             //If the ticket is being repoened, remove the previous close date
             if(status == TicketStatus.Open)

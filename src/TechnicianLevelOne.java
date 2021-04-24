@@ -91,7 +91,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
         //         return failMsg;
         //     }
         // }
-        return ITServiceDesk.closeTicketWithoutResolution(ticketID);
+        return ITServiceDesk.closeTicketWithoutResolution();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
         //         return failMsg;
         //     }   
         // }    
-        return ITServiceDesk.closeTicketWithResolution(ticketID);
+        return ITServiceDesk.closeTicketWithResolution();
     }
 
     @Override
@@ -136,7 +136,7 @@ public class TechnicianLevelOne implements TechnicianInterface{
         //     }   
         // }  
         
-        return ITServiceDesk.reopenTicket(ticketID);
+        return ITServiceDesk.reopenTicket();
     }
 
     @Override
@@ -245,7 +245,6 @@ public class TechnicianLevelOne implements TechnicianInterface{
 
     @Override
     public void displayClosedTickets() {
-        // TODO - testing needed for displayClosedTickets()
         System.out.println("--Tickets Currently Closed--");
         if(ITServiceDesk.getClosedTickets().size() > 0 ){
             ArrayList<String> closedTicketList = new ArrayList<String>();

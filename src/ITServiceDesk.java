@@ -133,7 +133,8 @@ class ITServiceDesk{
                     "4. Display all archived tickets\n" +
                     "5. View closed tickets\n"+
                     "6. Close a ticket without resolution\n" +
-                    "7. Close a ticket with resolution" +
+                    "7. Close a ticket with resolution\n" +
+                    "8. Reopen a closed ticket\n" +
                     //"9. TEST ARRAYS\n"+
                     "0. Exit");
         
@@ -176,12 +177,14 @@ class ITServiceDesk{
                 }
                 if(menuChoice == 6){
                     //Close a ticket WITHOUT a resolution.
-
-
+                    closeTicketWithoutResolution();
                 }
                 if(menuChoice == 7){
                     //Close a ticket WITH a resolution.
-
+                    closeTicketWithResolution();
+                }
+                if(menuChoice == 8){
+                    reopenTicket();
                 }
                 // Hidden menu item used for testing information stored in arrays
                 if(menuChoice == 9){
@@ -810,11 +813,24 @@ class ITServiceDesk{
         }
     }
 
-    public static String closeTicketWithResolution(String ticketID){
-        //TODO - closeTicketWithResolution implemented and needs testing.
+    public static String closeTicketWithResolution(){
         String successMsg = " was successfully closed with a resolution.";
         String failMsg = "Something went wrong while trying to close the ticket.";
         String alreadyClosedMsg = " is already closed.";
+        String header = "--Close a ticket without resolution--";
+        String ticketsAssignedMsg = "Below are the ticketIDs assigned to you:";
+        String ticketIDPrompt = "Please enter the TicketID you wish to close:";
+        String ticketID = "";
+        int technicianIndex = findTechnician(accountName);
+
+        System.out.println(header);
+        System.out.println(ticketsAssignedMsg);
+        //Print the TicketIDs assigned to this technician.
+        for(int i=0;i<technicianAccounts[technicianIndex].getNumberOfTicketsCurrentlyAssigned();i++){
+            System.out.println("TicketID: " + technicianAccounts[technicianIndex].getCurrentTicketList().get(i));
+        }
+        System.out.println(ticketIDPrompt);
+        ticketID = input.nextLine();
         //Check if its already been closed in either of the two ways.
         if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
            ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
@@ -825,8 +841,10 @@ class ITServiceDesk{
             ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedResolved);
             //Add the logged in technician's username to modifying technician property.
             ITServiceDesk.findTicket(ticketID).setModifyingTechnician(accountName);
+            System.out.println("Closed status logged by: " + ITServiceDesk.findTicket(ticketID).getModifyingTechnician());
             //Confirm or show failure of status change...
             if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved)){
+                System.out.println("TicketID: " + ticketID + successMsg);
                 return ticketID + successMsg;
             }
             else{
@@ -835,11 +853,26 @@ class ITServiceDesk{
         }    
     }
 
-    public static String closeTicketWithoutResolution(String ticketID){
-        // TODO closeTicketWithoutResolution is implemented and needs testing.
+    public static String closeTicketWithoutResolution(){
         String successMsg = " was successfully closed without a resolution.";
         String failMsg = "Something went wrong while trying to close the ticket.";
         String alreadyClosedMsg = " is already closed.";
+        String header = "--Close a ticket without resolution--";
+        String ticketsAssignedMsg = "Below are the ticketIDs assigned to you:";
+        String ticketIDPrompt = "Please enter the TicketID you wish to close:";
+        String ticketID = "";
+        int technicianIndex = findTechnician(accountName);
+
+        System.out.println(header);
+        System.out.println(ticketsAssignedMsg);
+        //Print the TicketIDs assigned to this technician.
+        for(int i=0;i<technicianAccounts[technicianIndex].getNumberOfTicketsCurrentlyAssigned();i++){
+            System.out.println("TicketID: " + technicianAccounts[technicianIndex].getCurrentTicketList().get(i));
+        }
+        //Prompt user for ticketID to change status.
+        System.out.println(ticketIDPrompt);
+        ticketID = input.nextLine();
+        //Check if already closed by either method.
         if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved)||
            ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedResolved))
            {
@@ -848,24 +881,36 @@ class ITServiceDesk{
         else{
             //Change status
             ITServiceDesk.findTicket(ticketID).setStatus(TicketStatus.ClosedUnresolved);
+            // System.out.println("TicketID: " + ticketID + successMsg);
             //Set tickets modifying technician to the one logged in.
             ITServiceDesk.findTicket(ticketID).setModifyingTechnician(accountName);
+            System.out.println("Closed status logged by: " + ITServiceDesk.findTicket(ticketID).getModifyingTechnician());
             //Check that the status was changed...
             if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.ClosedUnresolved))
             {
+                System.out.println("TicketID: " + ticketID + successMsg);
                 return "TicketID: " + ticketID + successMsg;
             }
             else{
+                System.out.println(failMsg);
                 return failMsg;
             }
         }
     }
 
-    public static String reopenTicket(String ticketID){
-        // TODO reopenTicket() is implemented and needs testing.
+    public static String reopenTicket(){
+        // TODO reopenTicket() needs similar solution to the closeTicket functions above.
         String successMsg = " was successfully reopened.";
         String failMsg = "Something went wrong while trying to reopen the ticket.";
         String alreadyOpenMsg = " is already open";
+        String header = "--Close a ticket without resolution--";
+        String ticketIDPrompt = "Please enter the TicketID you wish to close:";
+        String ticketID = "";
+
+        System.out.println(header);
+        //Prompt user for ticketID to change status.
+        System.out.println(ticketIDPrompt);
+        ticketID = input.nextLine();
         //Check if already open.
         if(ITServiceDesk.findTicket(ticketID).getStatus().equals(TicketStatus.Open))
         {
@@ -884,5 +929,22 @@ class ITServiceDesk{
                 return failMsg;
             }   
         }  
+    }
+
+    //Return index of technician logged in. When using you must check for -1(user not found)
+    public static int findTechnician(String userName){
+        int index = -1;
+        for(int i=0;i<technicianAccountCount;i++){
+            if(technicianAccounts[i].getUsername().equals(userName)){
+                index = i;
+            }
+        }
+        if(index == -1){
+            System.out.println("User not found. Something has gone wrong.");
+        }
+        else{
+            System.out.println("User index: "+ index);
+        }
+        return index;
     }
 }
