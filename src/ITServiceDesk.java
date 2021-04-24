@@ -22,6 +22,7 @@ class ITServiceDesk{
     static Ticket[] tempTickets = new Ticket[1];
 
     public static void main (String[] args){
+        setupTestStaffAccounts();
         setupTestTickets();
         setupTechnicians();
         welcomeMenu();
@@ -674,7 +675,7 @@ class ITServiceDesk{
         //Store them.
         staffAccount[0] = staff1;
         staffAccount[1] = staff2;
-
+        staffAccountCount = 2;
         return setupMsg;
     }
 
