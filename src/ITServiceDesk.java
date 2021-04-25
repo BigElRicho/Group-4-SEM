@@ -515,8 +515,18 @@ class ITServiceDesk{
         Ticket ticket6 = new Ticket("6", "test2@test.com","Tester 2", "Test 6");
         Ticket ticket7 = new Ticket("7", "test1@test.com","Tester 1", "Test 7");
         Ticket ticket8 = new Ticket("8", "test2@test.com","Tester 2", "Test 8");
-        Ticket ticket9 = new Ticket("9", "test1@test.com","Tester 1", "Test 9");
+        Ticket ticket9 = new Ticket("9", "test2@test.com","Tester 2", "Test 9");
+        ticket9.setOpenDate("08.02.2021");
+        ticket9.setClosedDate("11.02.2021");
+        ticket9.setModifyingTechnician("harry.styles");
+        ticket9.setStatus(TicketStatus.ClosedResolved);
+        //String id, String auth, String authEmail, String desc, TicketSeverity severity, String open, String closed)
         Ticket ticket10 = new Ticket("10", "test2@test.com","Tester 2", "Test 10");
+        ticket10.setOpenDate("05.04.2021");
+        ticket10.setClosedDate("21.04.2021");
+        ticket10.setModifyingTechnician("harry.styles");
+        ticket10.setStatus(TicketStatus.ClosedUnresolved);
+        
 
         ticket[0] = ticket1;
         ticket[1] = ticket2;
@@ -695,16 +705,9 @@ class ITServiceDesk{
         {
             if(Objects.nonNull(t))
             {
-                if(t.getOpenDate().After(startDate) && t.Status == TicketStatus.Open)
+                if(t.getOpenDate().After(startDate) &&  t.getOpenDate().Before(endDate))
                 {
                     tempArrayList.add(t);
-                }
-                else if(t.Status != TicketStatus.Open)
-                {
-                    if(t.getOpenDate().After(startDate) && t.getClosedDate().Before(endDate))
-                    {
-                        tempArrayList.add(t);
-                    }
                 }
             }
         }
@@ -744,7 +747,7 @@ class ITServiceDesk{
         }
         catch(Exception exc)
         {
-            System.out.println(String.format("Error thrown %s", exc));
+            System.out.println("Could not generate report. Please ensure all dates are entered correctly.\n");
         }
     }
 

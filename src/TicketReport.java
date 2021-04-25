@@ -39,7 +39,7 @@ public class TicketReport
         {
             if(ticket.Status == TicketStatus.ClosedResolved)
             {
-                System.out.println(String.format("Ticket ID: %s\nAuthor: %s\nOpen Date: %sAttending Technician: %s\nResolution Time (in days): %s\n", ticket.getId(), ticket.AuthorEmail, ticket.getOpenDate(), "Techn ID", GetTicketDuration(ticket)));
+                System.out.println(String.format("Ticket ID: %s\nAuthor: %s\nOpen Date: %s\nAttending Technician Username: %s\nResolution Time (in days): %s\n", ticket.getId(), ticket.AuthorEmail, ticket.getOpenDate(), ticket.getModifyingTechnician(), GetTicketDuration(ticket)));
             }
         }
     }
@@ -79,7 +79,7 @@ public class TicketReport
         }
         else
         {
-            System.out.println("There were no resolved cases during this period");
+            System.out.println("There were no unresolved cases from this period");
         }
        
     }

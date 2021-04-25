@@ -16,8 +16,16 @@ public class CustomDateTime
 
     public CustomDateTime(String dateAsString)
     {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        setDate(LocalDate.parse(dateAsString, dateFormatter).atTime(LocalTime.parse("00:00:00")));
+        try
+        {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            setDate(LocalDate.parse(dateAsString, dateFormatter).atTime(LocalTime.parse("00:00:00")));
+
+        }catch(Exception exc)
+        {
+            System.out.println("Date was entered incorrectly. Ensure the date is of format [dd.mm.yyyy]\n");
+        }
+      
     }
     
     public boolean GreaterThanTwentyFourHours()
