@@ -43,7 +43,7 @@ class ITServiceDesk{
                     "2. Forgot Password\n"+
                     "3. Create New Staff Account\n"+
                     "4. Technician Login\n"+
-                    //"9. TEST ARRAYS\n"+
+                    //"99. TEST ARRAYS\n"+
                     "0. Exit");
 
                 //Loop for input validation
@@ -67,7 +67,7 @@ class ITServiceDesk{
                     technicianLogin();
                 }
                 // Hidden menu item used for testing information stored in arrays
-                if(menuChoice == 9){
+                if(menuChoice == 99){
                     testArray();
                 }
             // If logged in and user is a staff member
@@ -79,7 +79,7 @@ class ITServiceDesk{
                     "1. Logout\n"+
                     "2. Submit new ticket\n"+
                     "3. Check Status of ticket\n"+
-                    //"9. TEST ARRAYS\n"+
+                    //"99. TEST ARRAYS\n"+
                     "0. Exit");
         
                 //Loop for input validation
@@ -100,25 +100,8 @@ class ITServiceDesk{
                 if(menuChoice == 3){
                     checkTicketStatus();
                 }
-                if(menuChoice == 4){
-                    ChangeTicketSeverity();
-                }
-                if(menuChoice == 5){
-                    int i=0;
-                    // System.out.println("This feature is coming soon");
-                    while(archivedTickets[i] != null)
-                    {
-                        System.out.println(archivedTickets[i]);
-                    }
-                }
-                if(menuChoice == 6){
-                    System.out.println("This feature is coming soon");
-                }
-                if(menuChoice == 7){
-                    System.out.println("This feature is coming soon");
-                }
                 // Hidden menu item used for testing information stored in arrays
-                if(menuChoice == 9){
+                if(menuChoice == 99){
                     testArray();
                 }
 
@@ -136,7 +119,8 @@ class ITServiceDesk{
                     "6. Close a ticket without resolution\n" +
                     "7. Close a ticket with resolution\n" +
                     "8. Reopen a closed ticket\n" +
-                    //"9. TEST ARRAYS\n"+
+                    "9. Generate report\n" +
+                    //"99. TEST ARRAYS\n"+
                     "0. Exit");
         
                 //Loop for input validation
@@ -155,7 +139,6 @@ class ITServiceDesk{
                     //Find technician with userName that matches account name
                     //then call displapCurrentTickets on that technician.
                     technicianAccounts[ValidateCurrentUserTechnician()].displayCurrentTickets();
-                    // System.out.println("This feature is coming soon");
                 }
                 if(menuChoice == 3){
                     ChangeTicketSeverity();
@@ -187,13 +170,13 @@ class ITServiceDesk{
                 if(menuChoice == 8){
                     reopenTicket();
                 }
-                // Hidden menu item used for testing information stored in arrays
-                if(menuChoice == 9){
-                    testArray();
-                }
-                if(menuChoice == 10)
+                if(menuChoice == 9)
                 {
                     GenerateReport();
+                }
+                // Hidden menu item used for testing information stored in arrays
+                if(menuChoice == 99){
+                    testArray();
                 }
             }
         }
